@@ -1,233 +1,180 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 
 const slides = [
   {
-    bg: "linear-gradient(135deg, #1e3a2f 0%, #2d5a44 40%, #1a4a35 100%)",
-    badge: "2025 대한민국 우수 브랜드 아파트",
-    title: "자연이 품은\n도시의 품격",
-    subtitle: "가나 플라워",
-    desc: "풍요로운 자연환경과 탁월한 입지 조건이 만나\n당신의 삶에 새로운 가치를 더합니다.",
-    accent: "#d4af55",
+    tag: "전국 당일 배달",
+    title: "마음을 전하는\n특별한 화환",
+    desc: "신선한 생화로 정성껏 제작된 화환,\n빠른 배송으로 소중한 순간을 빛내드립니다.",
+    cta: "지금 주문하기",
+    ctaHref: "#contact",
+    badge: "오전 11시 이전 주문 시 당일 배달",
+    flowers: ["🌹", "🌷", "💐", "🌸"],
+    gradient: "linear-gradient(135deg, #134426 0%, #1b5e35 40%, #2d7a50 70%, #3d8f65 100%)",
   },
   {
-    bg: "linear-gradient(135deg, #243b55 0%, #141e30 100%)",
-    badge: "전 세대 4Bay 판상형 설계",
-    title: "넓고 환한\n쾌적한 일상",
-    subtitle: "가나 플라워",
-    desc: "59㎡ ~ 102㎡ 다양한 평형으로 구성된\n합리적인 주거 공간을 경험하세요.",
-    accent: "#b8972e",
+    tag: "근조화환 전문",
+    title: "삼가 고인의\n명복을 빕니다",
+    desc: "엄숙하고 정중하게, 슬픔의 자리에\n위로와 예우를 담아 전해드립니다.",
+    cta: "근조화환 보기",
+    ctaHref: "#products",
+    badge: "24시간 접수 · 새벽 배달 가능",
+    flowers: ["🕊️", "🌿", "🌾", "🌼"],
+    gradient: "linear-gradient(135deg, #2c3e50 0%, #3d5166 40%, #4a6278 70%, #5a7390 100%)",
   },
   {
-    bg: "linear-gradient(135deg, #3d2b1f 0%, #5a3e2b 60%, #2b1e13 100%)",
-    badge: "총 1,200세대 대단지",
-    title: "커뮤니티와\n함께하는 삶",
-    subtitle: "가나 플라워",
-    desc: "수영장, 피트니스, 독서실, 카페테리아 등\n최고급 커뮤니티 시설이 함께합니다.",
-    accent: "#c8a94a",
+    tag: "축하화환 전문",
+    title: "기쁜 순간을\n함께 축하합니다",
+    desc: "개업, 취임, 수상, 생일… 축하드리는 마음을\n화사하고 풍성한 화환에 담아드립니다.",
+    cta: "축하화환 보기",
+    ctaHref: "#products",
+    badge: "리본 문구 맞춤 제작 무료",
+    flowers: ["🎊", "🌺", "🌻", "💛"],
+    gradient: "linear-gradient(135deg, #7b3f00 0%, #a0522d 40%, #c66b2d 70%, #d4843d 100%)",
   },
 ];
 
 export default function Hero() {
   const [current, setCurrent] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
-
-  const goTo = useCallback(
-    (idx: number) => {
-      if (isAnimating) return;
-      setIsAnimating(true);
-      setCurrent(idx);
-      setTimeout(() => setIsAnimating(false), 800);
-    },
-    [isAnimating]
-  );
-
-  const next = useCallback(() => goTo((current + 1) % slides.length), [current, goTo]);
+  const [animating, setAnimating] = useState(false);
 
   useEffect(() => {
-    const timer = setInterval(next, 5000);
+    const timer = setInterval(() => {
+      setAnimating(true);
+      setTimeout(() => {
+        setCurrent((c) => (c + 1) % slides.length);
+        setAnimating(false);
+      }, 400);
+    }, 5000);
     return () => clearInterval(timer);
-  }, [next]);
+  }, []);
+
+  const goTo = (idx: number) => {
+    if (idx === current) return;
+    setAnimating(true);
+    setTimeout(() => {
+      setCurrent(idx);
+      setAnimating(false);
+    }, 300);
+  };
 
   const slide = slides[current];
 
-  const scrollTo = (id: string) => {
+  const scrollTo = (href: string) => {
+    const id = href.replace("#", "");
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
     <section
-      className="relative w-full overflow-hidden"
-      style={{ minHeight: "90vh", background: slide.bg, transition: "background 0.8s ease" }}
+      className="relative min-h-[580px] md:min-h-[680px] flex items-center overflow-hidden"
+      style={{ background: slide.gradient, transition: "background 0.6s ease" }}
     >
-      {/* 배경 패턴 */}
-      <div
-        className="absolute inset-0 opacity-5"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-        }}
-      />
-
-      {/* 하단 웨이브 */}
-      <div className="absolute bottom-0 left-0 right-0">
-        <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style={{ display: "block" }}>
-          <path
-            d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z"
-            fill="#ffffff"
-          />
-        </svg>
+      {/* 배경 장식 원 */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-20 -right-20 w-96 h-96 rounded-full"
+          style={{ background: "rgba(255,255,255,0.06)" }} />
+        <div className="absolute -bottom-32 -left-16 w-80 h-80 rounded-full"
+          style={{ background: "rgba(255,255,255,0.05)" }} />
       </div>
 
-      {/* 메인 콘텐츠 */}
-      <div className="relative z-10 max-w-6xl mx-auto px-6 flex flex-col justify-center" style={{ minHeight: "90vh", paddingBottom: "5rem" }}>
-        <div
-          key={current}
-          className="animate-fade-in-up"
-          style={{ maxWidth: "700px" }}
-        >
-          {/* 배지 */}
+      <div className="relative max-w-6xl mx-auto px-6 py-16 md:py-20 w-full">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-10">
+          {/* 텍스트 영역 */}
           <div
-            className="inline-flex items-center gap-2 px-4 py-1.5 mb-6 text-xs font-bold tracking-widest rounded-full"
+            className="flex-1 text-white"
             style={{
-              background: "rgba(255,255,255,0.15)",
-              color: slide.accent,
-              border: `1px solid ${slide.accent}40`,
-              backdropFilter: "blur(10px)",
+              opacity: animating ? 0 : 1,
+              transform: animating ? "translateY(20px)" : "translateY(0)",
+              transition: "opacity 0.4s, transform 0.4s",
             }}
           >
-            <span
-              className="w-1.5 h-1.5 rounded-full"
-              style={{ background: slide.accent }}
-            />
-            {slide.badge}
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold mb-5"
+              style={{ background: "rgba(255,255,255,0.15)" }}>
+              <span className="w-2 h-2 rounded-full bg-white animate-pulse inline-block" />
+              {slide.tag}
+            </div>
+
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-tight mb-4 whitespace-pre-line"
+              style={{ letterSpacing: "-0.03em", textShadow: "0 2px 20px rgba(0,0,0,0.2)" }}>
+              {slide.title}
+            </h1>
+
+            <p className="text-base md:text-lg leading-relaxed mb-2 whitespace-pre-line"
+              style={{ color: "rgba(255,255,255,0.85)" }}>
+              {slide.desc}
+            </p>
+
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-8 mt-2"
+              style={{ background: "rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.9)" }}>
+              ✓ {slide.badge}
+            </div>
+
+            <div className="flex flex-wrap gap-3">
+              <button
+                onClick={() => scrollTo(slide.ctaHref)}
+                className="btn-pink"
+                style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem" }}
+              >
+                {slide.cta} →
+              </button>
+              <a href="tel:1588-3900" className="btn-outline-white">
+                ☎ 1588-3900 전화 주문
+              </a>
+            </div>
           </div>
 
-          {/* 서브타이틀 */}
-          <p
-            className="text-sm font-bold tracking-widest mb-3"
-            style={{ color: slide.accent, letterSpacing: "0.2em" }}
-          >
-            {slide.subtitle}
-          </p>
-
-          {/* 메인 타이틀 */}
-          <h1
-            className="font-black text-white mb-5"
-            style={{
-              fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
-              lineHeight: 1.15,
-              letterSpacing: "-0.03em",
-              whiteSpace: "pre-line",
-            }}
-          >
-            {slide.title}
-          </h1>
-
-          {/* 골드 라인 */}
+          {/* 꽃 비주얼 */}
           <div
-            className="mb-6"
-            style={{ width: "60px", height: "3px", background: slide.accent }}
-          />
-
-          {/* 설명 */}
-          <p
-            className="text-base md:text-lg mb-10"
-            style={{
-              color: "rgba(255,255,255,0.8)",
-              lineHeight: 1.8,
-              whiteSpace: "pre-line",
-            }}
+            className="flex-shrink-0 relative"
+            style={{ opacity: animating ? 0 : 1, transition: "opacity 0.4s" }}
           >
-            {slide.desc}
-          </p>
-
-          {/* CTA 버튼들 */}
-          <div className="flex flex-wrap gap-4">
-            <button
-              onClick={() => scrollTo("contact")}
-              className="btn-gold px-8 py-4 text-base"
-            >
-              분양 상담 신청
-            </button>
-            <button
-              onClick={() => scrollTo("intro")}
-              className="btn-outline px-8 py-4 text-base"
-              style={{ borderColor: "rgba(255,255,255,0.5)", color: "#fff" }}
-            >
-              아파트 알아보기
-            </button>
+            <div className="relative w-56 h-56 md:w-72 md:h-72">
+              <div className="absolute inset-0 rounded-full"
+                style={{ background: "rgba(255,255,255,0.08)" }} />
+              <div className="absolute inset-0 flex items-center justify-center text-8xl md:text-9xl animate-float select-none">
+                {slide.flowers[0]}
+              </div>
+              {[
+                { top: "8%", left: "8%", delay: "0.3s" },
+                { top: "8%", right: "8%", delay: "0.6s" },
+                { bottom: "8%", left: "8%", delay: "0.9s" },
+                { bottom: "8%", right: "8%", delay: "1.2s" },
+              ].map((pos, i) => (
+                <div key={i} className="absolute text-4xl select-none"
+                  style={{ ...pos, animation: `float 3s ease-in-out ${pos.delay} infinite` }}>
+                  {slide.flowers[i + 1] || "🌿"}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
         {/* 슬라이드 인디케이터 */}
-        <div className="absolute bottom-24 left-6 md:left-0 md:relative md:mt-16 flex items-center gap-3">
+        <div className="flex items-center gap-2 mt-10">
           {slides.map((_, i) => (
             <button
               key={i}
               onClick={() => goTo(i)}
-              className="transition-all duration-300 cursor-pointer border-none bg-transparent p-0"
+              className="transition-all duration-300 rounded-full border-none cursor-pointer"
+              style={{
+                width: i === current ? "2rem" : "0.5rem",
+                height: "0.5rem",
+                background: i === current ? "#fff" : "rgba(255,255,255,0.4)",
+                padding: 0,
+              }}
               aria-label={`슬라이드 ${i + 1}`}
-            >
-              <span
-                className="block rounded-full transition-all duration-300"
-                style={{
-                  width: i === current ? "32px" : "8px",
-                  height: "8px",
-                  background: i === current ? slide.accent : "rgba(255,255,255,0.4)",
-                }}
-              />
-            </button>
+            />
           ))}
-          <span className="text-xs ml-2" style={{ color: "rgba(255,255,255,0.5)" }}>
-            {String(current + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}
-          </span>
         </div>
       </div>
 
-      {/* 우측 핵심 정보 카드 (데스크탑) */}
-      <div
-        className="absolute right-6 top-1/2 -translate-y-1/2 hidden xl:flex flex-col gap-3"
-        style={{ transform: "translateY(-50%)" }}
-      >
-        {[
-          { label: "총 세대수", value: "1,200세대" },
-          { label: "건설사", value: "가나건설" },
-          { label: "청약 접수", value: "2025.08" },
-          { label: "입주 예정", value: "2028.03" },
-        ].map((item) => (
-          <div
-            key={item.label}
-            className="px-5 py-3 rounded-lg text-center"
-            style={{
-              background: "rgba(255,255,255,0.12)",
-              backdropFilter: "blur(12px)",
-              border: "1px solid rgba(255,255,255,0.2)",
-              minWidth: "140px",
-            }}
-          >
-            <div className="text-xs mb-1" style={{ color: "rgba(255,255,255,0.6)", letterSpacing: "0.05em" }}>
-              {item.label}
-            </div>
-            <div className="font-bold text-white text-sm">{item.value}</div>
-          </div>
-        ))}
-      </div>
-
-      {/* 모바일 스크롤 힌트 */}
-      <div
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 md:hidden"
-        style={{ transform: "translateX(-50%)" }}
-      >
-        <span className="text-xs" style={{ color: "rgba(255,255,255,0.5)" }}>스크롤</span>
-        <div
-          className="w-px h-8"
-          style={{
-            background: "linear-gradient(to bottom, rgba(255,255,255,0.5), transparent)",
-            animation: "shimmer 2s infinite",
-          }}
-        />
+      {/* 하단 스크롤 유도 */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-white opacity-50">
+        <span className="text-xs tracking-widest">SCROLL</span>
+        <div className="w-px h-8 bg-white" />
       </div>
     </section>
   );

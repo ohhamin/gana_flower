@@ -2,154 +2,138 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const stats = [
-  { value: "1,200", unit: "세대", label: "총 세대수" },
-  { value: "59~102", unit: "㎡", label: "공급 면적" },
-  { value: "15", unit: "개동", label: "아파트 동수" },
-  { value: "38", unit: "층", label: "최고 층수" },
+const categories = [
+  {
+    emoji: "🕊️",
+    name: "근조화환",
+    nameEn: "FUNERAL WREATH",
+    desc: "고인에 대한 예우와 유가족을 향한 위로를 담아 엄숙하고 정중하게 제작합니다.",
+    color: "#4a6278",
+    bg: "#f0f4f8",
+    border: "#c8d8e8",
+    href: "#products",
+  },
+  {
+    emoji: "🎊",
+    name: "축하화환",
+    nameEn: "CELEBRATION WREATH",
+    desc: "취임, 수상, 승진, 영전 등 기쁜 자리에 화사하고 풍성한 축하의 마음을 전합니다.",
+    color: "#c49a3c",
+    bg: "#fff8e6",
+    border: "#f0d890",
+    href: "#products",
+  },
+  {
+    emoji: "🏪",
+    name: "개업화환",
+    nameEn: "OPENING WREATH",
+    desc: "새로운 출발을 축하하는 개업, 이전, 확장 시 번창을 기원하는 화환을 전달합니다.",
+    color: "#e05577",
+    bg: "#fce8ed",
+    border: "#f5b8c8",
+    href: "#products",
+  },
+  {
+    emoji: "🎓",
+    name: "졸업화환",
+    nameEn: "GRADUATION WREATH",
+    desc: "졸업, 수료, 입학 등 새로운 시작을 맞이하는 소중한 분께 축하를 전해드립니다.",
+    color: "#1b5e35",
+    bg: "#e8f5ed",
+    border: "#a8d5b8",
+    href: "#products",
+  },
 ];
 
-const highlights = [
-  {
-    icon: "🌿",
-    title: "자연친화 설계",
-    desc: "단지 내 중앙광장과 1km 산책로, 사계절 꽃길로 자연을 일상에서 즐길 수 있습니다.",
-  },
-  {
-    icon: "🏫",
-    title: "우수한 학군",
-    desc: "도보 5분 거리에 초·중·고교가 밀집하여 자녀 교육에 최적화된 환경입니다.",
-  },
-  {
-    icon: "🚇",
-    title: "교통 요충지",
-    desc: "지하철 2·9호선 더블역세권, 주요 간선도로 인접으로 어디든 빠르게 이동합니다.",
-  },
-  {
-    icon: "🏪",
-    title: "생활 인프라",
-    desc: "대형마트, 병원, 은행, 관공서 등 생활 편의시설이 반경 500m 내에 집중되어 있습니다.",
-  },
-  {
-    icon: "🏊",
-    title: "프리미엄 커뮤니티",
-    desc: "실내 수영장, 피트니스센터, 골프연습장, 독서실, 게스트하우스를 갖추었습니다.",
-  },
-  {
-    icon: "🔒",
-    title: "스마트 보안 시스템",
-    desc: "24시간 통합 CCTV, 무인택배함, 스마트홈 IoT 시스템으로 안심 생활을 보장합니다.",
-  },
+const stats = [
+  { num: "15,000+", label: "누적 배달 건수", icon: "🚚" },
+  { num: "4.9★", label: "고객 만족도", icon: "⭐" },
+  { num: "30분", label: "평균 제작 시간", icon: "⏱️" },
+  { num: "전국", label: "배달 지역", icon: "🗺️" },
 ];
 
 export default function Intro() {
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const obs = new IntersectionObserver(
+    const observer = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) setVisible(true); },
       { threshold: 0.15 }
     );
-    if (sectionRef.current) obs.observe(sectionRef.current);
-    return () => obs.disconnect();
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
   }, []);
 
+  const scrollTo = (href: string) => {
+    const id = href.replace("#", "");
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
-    <section id="intro" ref={sectionRef} className="py-20 md:py-28 bg-white">
+    <section id="intro" ref={ref} className="py-20 md:py-28" style={{ background: "var(--beige)" }}>
       <div className="max-w-6xl mx-auto px-6">
         {/* 섹션 헤더 */}
-        <div
-          className="text-center mb-16"
-          style={{
-            opacity: visible ? 1 : 0,
-            transform: visible ? "none" : "translateY(30px)",
-            transition: "all 0.7s ease",
-          }}
-        >
-          <p className="section-subtitle mb-3">APARTMENT INTRODUCTION</p>
-          <div className="gold-line mx-auto" />
-          <h2 className="section-title mt-4">
-            새로운 삶의 기준,<br />
-            <span style={{ color: "var(--gold)" }}>가나 플라워</span>
-          </h2>
-          <p className="mt-4 text-base md:text-lg" style={{ color: "#666", maxWidth: "600px", margin: "1rem auto 0" }}>
-            수십 년의 건설 노하우와 혁신적 설계로 탄생한 가나 플라워는<br className="hidden md:block" />
-            당신이 꿈꾸던 프리미엄 주거 라이프스타일을 현실로 만듭니다.
+        <div className="text-center mb-14"
+          style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(30px)", transition: "all 0.7s" }}>
+          <span className="section-label">FLOWER CATEGORY</span>
+          <h2 className="section-title">화환 종류 안내</h2>
+          <div className="divider-line mx-auto" />
+          <p className="section-desc max-w-xl mx-auto">
+            상황에 맞는 화환을 선택하세요.<br />
+            가나플라워가 마음을 담아 정성껏 제작하고 빠르게 배달해 드립니다.
           </p>
         </div>
 
-        {/* 통계 수치 */}
-        <div
-          className="grid grid-cols-2 md:grid-cols-4 gap-px mb-20"
-          style={{
-            background: "var(--border)",
-            border: "1px solid var(--border)",
-            opacity: visible ? 1 : 0,
-            transform: visible ? "none" : "translateY(20px)",
-            transition: "all 0.7s ease 0.2s",
-          }}
-        >
-          {stats.map((stat) => (
-            <div
-              key={stat.label}
-              className="flex flex-col items-center justify-center py-8 px-4 text-center"
-              style={{ background: "#fff" }}
+        {/* 카테고리 카드 */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-20">
+          {categories.map((cat, i) => (
+            <button
+              key={i}
+              onClick={() => scrollTo(cat.href)}
+              className="text-left p-6 rounded-2xl border-2 transition-all duration-300 cursor-pointer group"
+              style={{
+                background: cat.bg,
+                borderColor: cat.border,
+                opacity: visible ? 1 : 0,
+                transform: visible ? "translateY(0)" : "translateY(40px)",
+                transition: `all 0.6s ease ${i * 0.1}s`,
+              }}
             >
-              <div className="flex items-end gap-1 mb-1">
-                <span
-                  className="font-black"
-                  style={{
-                    fontSize: "clamp(1.8rem, 4vw, 2.8rem)",
-                    color: "var(--primary)",
-                    lineHeight: 1,
-                  }}
-                >
-                  {stat.value}
-                </span>
-                <span
-                  className="font-bold mb-1"
-                  style={{ color: "var(--gold)", fontSize: "1rem" }}
-                >
-                  {stat.unit}
-                </span>
+              <div className="text-5xl mb-4 transition-transform duration-300 group-hover:scale-110 inline-block">
+                {cat.emoji}
               </div>
-              <p className="text-sm font-medium" style={{ color: "#888" }}>
-                {stat.label}
+              <div className="text-xs font-bold tracking-widest mb-1" style={{ color: cat.color }}>
+                {cat.nameEn}
+              </div>
+              <div className="text-lg font-black mb-2" style={{ color: "#1a1a1a" }}>
+                {cat.name}
+              </div>
+              <p className="text-sm leading-relaxed" style={{ color: "var(--gray-dark)" }}>
+                {cat.desc}
               </p>
-            </div>
+              <div className="mt-4 text-sm font-bold flex items-center gap-1" style={{ color: cat.color }}>
+                상품 보기 →
+              </div>
+            </button>
           ))}
         </div>
 
-        {/* 하이라이트 카드 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {highlights.map((item, i) => (
-            <div
-              key={item.title}
-              className="p-6 rounded-xl border hover:shadow-lg transition-shadow duration-300"
-              style={{
-                borderColor: "var(--border)",
-                background: "#fff",
-                opacity: visible ? 1 : 0,
-                transform: visible ? "none" : "translateY(25px)",
-                transition: `all 0.6s ease ${0.1 * i + 0.3}s`,
-              }}
-            >
-              <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-4"
-                style={{ background: "var(--beige)" }}
-              >
-                {item.icon}
-              </div>
-              <h3
-                className="font-bold text-base mb-2"
-                style={{ color: "var(--primary)" }}
-              >
-                {item.title}
-              </h3>
-              <p className="text-sm leading-relaxed" style={{ color: "#666" }}>
-                {item.desc}
-              </p>
+        {/* 통계 */}
+        <div
+          className="grid grid-cols-2 md:grid-cols-4 gap-6 p-8 rounded-2xl"
+          style={{
+            background: "linear-gradient(135deg, var(--primary-dark), var(--primary))",
+            opacity: visible ? 1 : 0,
+            transition: "opacity 0.7s 0.4s",
+          }}
+        >
+          {stats.map((s, i) => (
+            <div key={i} className="text-center text-white">
+              <div className="text-3xl mb-2">{s.icon}</div>
+              <div className="text-2xl md:text-3xl font-black mb-1">{s.num}</div>
+              <div className="text-sm" style={{ color: "rgba(255,255,255,0.75)" }}>{s.label}</div>
             </div>
           ))}
         </div>
