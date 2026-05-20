@@ -2,368 +2,315 @@
 
 import { useState } from "react";
 
-const unitTypes = [
-  {
-    type: "A타입",
-    area: "59㎡",
-    rooms: "방 2개 / 욕실 1개",
-    count: "300세대",
-    floor: "5~38층",
-    features: ["남향 위주 배치", "발코니 확장", "팬트리 수납공간"],
-    color: "#1e3a2f",
-    popular: false,
-  },
-  {
-    type: "B타입",
-    area: "74㎡",
-    rooms: "방 3개 / 욕실 2개",
-    count: "350세대",
-    floor: "5~38층",
-    features: ["남향 4Bay 판상형", "알파룸 제공", "드레스룸"],
-    color: "#b8972e",
-    popular: true,
-  },
-  {
-    type: "C타입",
-    area: "84㎡",
-    rooms: "방 3개 / 욕실 2개",
-    count: "400세대",
-    floor: "3~38층",
-    features: ["남·동향 복합배치", "넓은 주방·거실", "대형 드레스룸"],
-    color: "#1e3a2f",
-    popular: false,
-  },
-  {
-    type: "D타입",
-    area: "102㎡",
-    rooms: "방 4개 / 욕실 2개",
-    count: "150세대",
-    floor: "3~38층",
-    features: ["4Bay 파노라마 뷰", "독립적 가족공간", "더블 드레스룸"],
-    color: "#1e3a2f",
-    popular: false,
-  },
+const tabs = [
+  { id: "funeral", label: "근조화환", emoji: "🕊️" },
+  { id: "celebrate", label: "축하화환", emoji: "🎊" },
+  { id: "opening", label: "개업화환", emoji: "🏪" },
+  { id: "graduation", label: "졸업화환", emoji: "🎓" },
 ];
 
-const floorPlanData = {
-  "A타입": {
-    width: 320,
-    height: 240,
-    rooms: [
-      { x: 10, y: 10, w: 90, h: 100, label: "거실", color: "#e8f4ec" },
-      { x: 110, y: 10, w: 100, h: 60, label: "주방", color: "#f5f0e8" },
-      { x: 220, y: 10, w: 90, h: 100, label: "침실1", color: "#e8f0f5" },
-      { x: 10, y: 120, w: 80, h: 110, label: "침실2", color: "#e8f0f5" },
-      { x: 100, y: 80, w: 110, h: 70, label: "식당", color: "#f5f0e8" },
-      { x: 220, y: 120, w: 90, h: 55, label: "욕실", color: "#f0f5f8" },
-      { x: 220, y: 185, w: 90, h: 45, label: "현관", color: "#f5f5f5" },
-      { x: 100, y: 160, w: 110, h: 70, label: "발코니", color: "#e0ede5" },
-    ],
-  },
-  "B타입": {
-    width: 320,
-    height: 240,
-    rooms: [
-      { x: 10, y: 10, w: 110, h: 110, label: "거실", color: "#e8f4ec" },
-      { x: 130, y: 10, w: 80, h: 60, label: "주방", color: "#f5f0e8" },
-      { x: 220, y: 10, w: 90, h: 80, label: "침실1", color: "#e8f0f5" },
-      { x: 10, y: 130, w: 80, h: 100, label: "침실2", color: "#e8f0f5" },
-      { x: 100, y: 130, w: 80, h: 100, label: "침실3", color: "#e8f0f5" },
-      { x: 190, y: 100, w: 60, h: 60, label: "욕실1", color: "#f0f5f8" },
-      { x: 260, y: 100, w: 50, h: 60, label: "욕실2", color: "#f0f5f8" },
-      { x: 190, y: 170, w: 120, h: 60, label: "드레스룸", color: "#f5f5e8" },
-      { x: 130, y: 75, w: 80, h: 45, label: "알파룸", color: "#f5f0e8" },
-    ],
-  },
-  "C타입": {
-    width: 320,
-    height: 240,
-    rooms: [
-      { x: 10, y: 10, w: 120, h: 120, label: "거실", color: "#e8f4ec" },
-      { x: 140, y: 10, w: 80, h: 65, label: "주방", color: "#f5f0e8" },
-      { x: 230, y: 10, w: 80, h: 90, label: "침실1", color: "#e8f0f5" },
-      { x: 10, y: 140, w: 95, h: 90, label: "침실2", color: "#e8f0f5" },
-      { x: 115, y: 140, w: 95, h: 90, label: "침실3", color: "#e8f0f5" },
-      { x: 140, y: 80, w: 80, h: 50, label: "식당", color: "#f5f0e8" },
-      { x: 230, y: 110, w: 80, h: 60, label: "욕실", color: "#f0f5f8" },
-      { x: 220, y: 175, w: 90, h: 55, label: "드레스룸", color: "#f5f5e8" },
-    ],
-  },
-  "D타입": {
-    width: 320,
-    height: 240,
-    rooms: [
-      { x: 10, y: 10, w: 130, h: 120, label: "거실", color: "#e8f4ec" },
-      { x: 150, y: 10, w: 80, h: 65, label: "주방+식당", color: "#f5f0e8" },
-      { x: 240, y: 10, w: 70, h: 90, label: "침실1", color: "#e8f0f5" },
-      { x: 10, y: 140, w: 80, h: 90, label: "침실2", color: "#e8f0f5" },
-      { x: 100, y: 140, w: 80, h: 90, label: "침실3", color: "#e8f0f5" },
-      { x: 190, y: 140, w: 80, h: 90, label: "침실4", color: "#e8f0f5" },
-      { x: 150, y: 80, w: 80, h: 50, label: "다용도실", color: "#f5f0e8" },
-      { x: 240, y: 110, w: 70, h: 55, label: "욕실", color: "#f0f5f8" },
-      { x: 280, y: 175, w: 30, h: 55, label: "현관", color: "#f5f5f5" },
-    ],
-  },
+type Product = {
+  name: string;
+  size: string;
+  price: string;
+  originalPrice?: string;
+  emoji: string;
+  badge?: string;
+  badgeType?: "hot" | "new" | "best";
+  bg: string;
+  desc: string;
+  popular?: boolean;
+};
+
+const products: Record<string, Product[]> = {
+  funeral: [
+    {
+      name: "소형 근조화환",
+      size: "소형 (H 110cm)",
+      price: "55,000",
+      emoji: "🤍",
+      badge: "BEST",
+      badgeType: "best",
+      bg: "linear-gradient(135deg, #e8eef4, #c8d8e8)",
+      desc: "흰 국화와 청초한 조화로 고인을 추모합니다.",
+    },
+    {
+      name: "중형 근조화환",
+      size: "중형 (H 140cm)",
+      price: "85,000",
+      originalPrice: "95,000",
+      emoji: "🕊️",
+      badge: "인기",
+      badgeType: "hot",
+      bg: "linear-gradient(135deg, #dce8f0, #b0c8dc)",
+      desc: "풍성한 꽃으로 정중한 조의를 표현합니다.",
+      popular: true,
+    },
+    {
+      name: "대형 근조화환",
+      size: "대형 (H 170cm)",
+      price: "130,000",
+      emoji: "🌿",
+      bg: "linear-gradient(135deg, #ccdae8, #a0b8d0)",
+      desc: "넓은 공간에 위엄 있는 분위기를 연출합니다.",
+    },
+    {
+      name: "특대형 근조화환",
+      size: "특대 (H 200cm)",
+      price: "200,000",
+      emoji: "⚜️",
+      badge: "프리미엄",
+      badgeType: "new",
+      bg: "linear-gradient(135deg, #b8ccd8, #90a8c0)",
+      desc: "최고급 생화로 격식 있는 예우를 갖춥니다.",
+    },
+  ],
+  celebrate: [
+    {
+      name: "소형 축하화환",
+      size: "소형 (H 110cm)",
+      price: "60,000",
+      emoji: "🌸",
+      badge: "BEST",
+      badgeType: "best",
+      bg: "linear-gradient(135deg, #fce8ed, #f5b8c8)",
+      desc: "다채로운 꽃으로 밝은 축하를 전합니다.",
+    },
+    {
+      name: "중형 축하화환",
+      size: "중형 (H 140cm)",
+      price: "90,000",
+      originalPrice: "100,000",
+      emoji: "🎊",
+      badge: "인기",
+      badgeType: "hot",
+      bg: "linear-gradient(135deg, #fad0dc, #f0a0b8)",
+      desc: "화사하고 풍성한 꽃다발로 감동을 드립니다.",
+      popular: true,
+    },
+    {
+      name: "대형 축하화환",
+      size: "대형 (H 170cm)",
+      price: "140,000",
+      emoji: "🌺",
+      bg: "linear-gradient(135deg, #f5c0cc, #e890a8)",
+      desc: "넓은 공간을 화사하게 장식합니다.",
+    },
+    {
+      name: "특대형 축하화환",
+      size: "특대 (H 200cm)",
+      price: "210,000",
+      emoji: "👑",
+      badge: "프리미엄",
+      badgeType: "new",
+      bg: "linear-gradient(135deg, #f0b0c0, #e07090)",
+      desc: "최상급 꽃으로 특별한 날을 완성합니다.",
+    },
+  ],
+  opening: [
+    {
+      name: "소형 개업화환",
+      size: "소형 (H 110cm)",
+      price: "65,000",
+      emoji: "🌻",
+      badge: "BEST",
+      badgeType: "best",
+      bg: "linear-gradient(135deg, #fff8e6, #f5e090)",
+      desc: "새 출발의 기쁨을 환하게 축하드립니다.",
+    },
+    {
+      name: "중형 개업화환",
+      size: "중형 (H 140cm)",
+      price: "95,000",
+      originalPrice: "110,000",
+      emoji: "🎉",
+      badge: "인기",
+      badgeType: "hot",
+      bg: "linear-gradient(135deg, #fef0c0, #f8d870)",
+      desc: "번창을 기원하는 풍성한 꽃 어레인지.",
+      popular: true,
+    },
+    {
+      name: "대형 개업화환",
+      size: "대형 (H 170cm)",
+      price: "150,000",
+      emoji: "🌈",
+      bg: "linear-gradient(135deg, #fde8a8, #f8c850)",
+      desc: "화려하고 인상적인 개업 분위기를 연출합니다.",
+    },
+    {
+      name: "특대형 개업화환",
+      size: "특대 (H 200cm)",
+      price: "220,000",
+      emoji: "⭐",
+      badge: "프리미엄",
+      badgeType: "new",
+      bg: "linear-gradient(135deg, #fad890, #f5b830)",
+      desc: "최고급 퀄리티로 성공적인 출발을 응원합니다.",
+    },
+  ],
+  graduation: [
+    {
+      name: "소형 졸업화환",
+      size: "소형 (H 110cm)",
+      price: "55,000",
+      emoji: "🎓",
+      badge: "BEST",
+      badgeType: "best",
+      bg: "linear-gradient(135deg, #e8f5ed, #b0d8bc)",
+      desc: "졸업의 기쁨을 함께 축하드립니다.",
+    },
+    {
+      name: "중형 졸업화환",
+      size: "중형 (H 140cm)",
+      price: "85,000",
+      originalPrice: "95,000",
+      emoji: "🌱",
+      badge: "인기",
+      badgeType: "hot",
+      bg: "linear-gradient(135deg, #d0ecda, #90c8a0)",
+      desc: "새로운 시작을 응원하는 싱그러운 꽃.",
+      popular: true,
+    },
+    {
+      name: "대형 졸업화환",
+      size: "대형 (H 170cm)",
+      price: "130,000",
+      emoji: "🌿",
+      bg: "linear-gradient(135deg, #b8e0c4, #70b888)",
+      desc: "가장 뜻깊은 순간을 풍성하게 꾸며드립니다.",
+    },
+    {
+      name: "특대형 졸업화환",
+      size: "특대 (H 200cm)",
+      price: "190,000",
+      emoji: "🏆",
+      badge: "프리미엄",
+      badgeType: "new",
+      bg: "linear-gradient(135deg, #a0d4b0, #50a870)",
+      desc: "특별한 졸업을 최고급 꽃으로 기념합니다.",
+    },
+  ],
 };
 
 export default function Units() {
-  const [activeType, setActiveType] = useState("B타입");
+  const [activeTab, setActiveTab] = useState("funeral");
 
-  const active = unitTypes.find((u) => u.type === activeType)!;
-  const plan = floorPlanData[activeType as keyof typeof floorPlanData];
+  const scrollToContact = () => {
+    const el = document.getElementById("contact");
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
-    <section id="units" className="py-20 md:py-28" style={{ background: "var(--gray-light)" }}>
+    <section id="products" className="py-20 md:py-28" style={{ background: "#fff" }}>
       <div className="max-w-6xl mx-auto px-6">
-        {/* 섹션 헤더 */}
-        <div className="text-center mb-12">
-          <p className="section-subtitle mb-3">UNIT GUIDE</p>
-          <div className="gold-line mx-auto" />
-          <h2 className="section-title mt-4">
-            세대 안내
-          </h2>
-          <p className="mt-3 text-sm" style={{ color: "#888" }}>
-            다양한 평형으로 구성된 가나 플라워의 세대 정보를 확인하세요
+        {/* 헤더 */}
+        <div className="text-center mb-10">
+          <span className="section-label">PRODUCTS</span>
+          <h2 className="section-title">화환 상품 안내</h2>
+          <div className="divider-line mx-auto" />
+          <p className="section-desc">
+            상황에 맞는 화환을 선택하시면 전문 플로리스트가 정성껏 제작해 드립니다.<br />
+            리본 문구 맞춤 제작 무료 · 당일 배달 가능
           </p>
         </div>
 
-        {/* 타입 선택 탭 */}
-        <div
-          className="flex overflow-x-auto mb-8"
-          style={{ borderBottom: "2px solid var(--border)", gap: 0 }}
-        >
-          {unitTypes.map((unit) => (
+        {/* 탭 */}
+        <div className="flex overflow-x-auto border-b mb-8" style={{ borderColor: "var(--border)" }}>
+          {tabs.map((tab) => (
             <button
-              key={unit.type}
-              onClick={() => setActiveType(unit.type)}
-              className="tab-btn relative flex-shrink-0"
-              style={{
-                color: activeType === unit.type ? "var(--primary)" : "#888",
-                fontWeight: activeType === unit.type ? 700 : 500,
-                borderBottom: activeType === unit.type ? "3px solid var(--gold)" : "3px solid transparent",
-                marginBottom: "-2px",
-              }}
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`tab-btn flex items-center gap-1.5 ${activeTab === tab.id ? "active" : ""}`}
             >
-              {unit.popular && (
-                <span
-                  className="absolute -top-2 -right-1 text-xs font-bold px-1.5 py-0.5 rounded-full"
-                  style={{ background: "#ef4444", color: "#fff", fontSize: "0.65rem" }}
-                >
-                  인기
-                </span>
-              )}
-              <span>{unit.type}</span>
-              <span className="ml-1.5 font-medium" style={{ color: "var(--gold)" }}>
-                {unit.area}
-              </span>
+              <span>{tab.emoji}</span>
+              {tab.label}
             </button>
           ))}
         </div>
 
-        {/* 세대 상세 정보 */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* 평면도 */}
-          <div
-            className="rounded-xl overflow-hidden shadow-sm"
-            style={{ background: "#fff", border: "1px solid var(--border)" }}
-          >
+        {/* 상품 그리드 */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {products[activeTab].map((product, i) => (
             <div
-              className="px-6 py-4 flex items-center justify-between"
-              style={{ background: "var(--primary)", color: "#fff" }}
+              key={i}
+              className="product-card relative"
+              style={{
+                border: product.popular ? "2px solid var(--pink)" : "1px solid var(--border)",
+              }}
             >
-              <h3 className="font-bold text-base">
-                {active.type} — {active.area} 평면도
-              </h3>
-              <span className="text-xs opacity-70">개략 도면 (실제와 상이할 수 있음)</span>
-            </div>
-            <div className="p-6 flex items-center justify-center" style={{ background: "#fafafa", minHeight: "280px" }}>
-              <svg
-                viewBox={`0 0 ${plan.width} ${plan.height}`}
-                width="100%"
-                style={{ maxWidth: "400px" }}
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                {/* 배경 */}
-                <rect width={plan.width} height={plan.height} fill="#f0f0f0" />
-                {/* 외곽선 */}
-                <rect x="8" y="8" width={plan.width - 16} height={plan.height - 16} fill="none" stroke="#1e3a2f" strokeWidth="2" />
-                {/* 방들 */}
-                {plan.rooms.map((room, i) => (
-                  <g key={i}>
-                    <rect
-                      x={room.x}
-                      y={room.y}
-                      width={room.w}
-                      height={room.h}
-                      fill={room.color}
-                      stroke="#ccc"
-                      strokeWidth="0.5"
-                    />
-                    <text
-                      x={room.x + room.w / 2}
-                      y={room.y + room.h / 2 + 4}
-                      textAnchor="middle"
-                      fontSize={room.w > 70 ? "10" : "8"}
-                      fill="#333"
-                      fontFamily="sans-serif"
-                    >
-                      {room.label}
-                    </text>
-                  </g>
-                ))}
-              </svg>
-            </div>
-          </div>
-
-          {/* 세대 정보 */}
-          <div className="flex flex-col gap-4">
-            {/* 기본 정보 카드 */}
-            <div
-              className="rounded-xl p-6"
-              style={{ background: "#fff", border: "1px solid var(--border)" }}
-            >
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <p className="text-sm font-medium mb-1" style={{ color: "#888" }}>
-                    {active.type}
-                  </p>
-                  <h3
-                    className="font-black"
-                    style={{ fontSize: "2.5rem", color: "var(--primary)", lineHeight: 1 }}
-                  >
-                    {active.area}
-                  </h3>
-                </div>
-                {active.popular && (
-                  <span
-                    className="px-3 py-1 rounded-full text-xs font-bold"
-                    style={{ background: "#fef3c7", color: "#b8972e" }}
-                  >
-                    ★ 인기 평형
+              {/* 인기 표시 */}
+              {product.popular && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
+                  <span className="px-3 py-1 text-xs font-bold rounded-full text-white"
+                    style={{ background: "var(--pink)" }}>
+                    ★ 가장 인기
                   </span>
+                </div>
+              )}
+
+              {/* 이미지 영역 */}
+              <div className="relative h-44 flex items-center justify-center overflow-hidden"
+                style={{ background: product.bg }}>
+                <span className="text-7xl select-none">{product.emoji}</span>
+                {product.badge && (
+                  <div className="absolute top-3 left-3">
+                    <span className={`badge badge-${product.badgeType}`}>
+                      {product.badge}
+                    </span>
+                  </div>
                 )}
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                {[
-                  { label: "구조", value: active.rooms },
-                  { label: "공급 세대", value: active.count },
-                  { label: "공급 층수", value: active.floor },
-                  { label: "주차", value: "세대당 1.5대" },
-                ].map((info) => (
-                  <div
-                    key={info.label}
-                    className="rounded-lg p-3"
-                    style={{ background: "var(--beige)" }}
-                  >
-                    <p className="text-xs mb-1" style={{ color: "#999" }}>
-                      {info.label}
-                    </p>
-                    <p className="font-bold text-sm" style={{ color: "var(--primary)" }}>
-                      {info.value}
-                    </p>
-                  </div>
-                ))}
+              {/* 상품 정보 */}
+              <div className="p-4">
+                <div className="text-xs text-gray-400 mb-1">{product.size}</div>
+                <h3 className="font-bold text-base mb-1" style={{ color: "var(--fg)" }}>
+                  {product.name}
+                </h3>
+                <p className="text-xs mb-3 leading-relaxed" style={{ color: "var(--gray)" }}>
+                  {product.desc}
+                </p>
+
+                {/* 가격 */}
+                <div className="flex items-baseline gap-2 mb-4">
+                  {product.originalPrice && (
+                    <span className="text-sm line-through" style={{ color: "#bbb" }}>
+                      {product.originalPrice}원
+                    </span>
+                  )}
+                  <span className="text-xl font-black" style={{ color: "var(--primary)" }}>
+                    {product.price}
+                    <span className="text-sm font-semibold">원</span>
+                  </span>
+                </div>
+
+                <button
+                  onClick={scrollToContact}
+                  className="w-full py-2.5 text-sm font-bold rounded-lg transition-all duration-200"
+                  style={{
+                    background: product.popular ? "var(--pink)" : "var(--primary)",
+                    color: "#fff",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  주문하기
+                </button>
               </div>
             </div>
-
-            {/* 특장점 */}
-            <div
-              className="rounded-xl p-6"
-              style={{ background: "#fff", border: "1px solid var(--border)" }}
-            >
-              <h4 className="font-bold text-sm mb-4" style={{ color: "var(--primary)" }}>
-                {active.type} 특장점
-              </h4>
-              <ul className="flex flex-col gap-3">
-                {active.features.map((feat) => (
-                  <li key={feat} className="flex items-center gap-3">
-                    <span
-                      className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold"
-                      style={{ background: "var(--primary)", color: "#fff" }}
-                    >
-                      ✓
-                    </span>
-                    <span className="text-sm" style={{ color: "#444" }}>
-                      {feat}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* CTA */}
-            <button
-              onClick={() => {
-                document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
-              }}
-              className="btn-primary w-full py-4 text-base"
-            >
-              {active.type} 상담 신청하기 →
-            </button>
-          </div>
+          ))}
         </div>
 
-        {/* 전체 세대수 테이블 */}
-        <div
-          className="mt-10 rounded-xl overflow-hidden shadow-sm"
-          style={{ border: "1px solid var(--border)" }}
-        >
-          <div
-            className="px-6 py-4"
-            style={{ background: "var(--primary)", color: "#fff" }}
-          >
-            <h3 className="font-bold text-sm">공급 세대 현황</h3>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="info-table">
-              <thead>
-                <tr>
-                  <th>타입</th>
-                  <th>공급면적</th>
-                  <th>전용면적</th>
-                  <th>세대수</th>
-                  <th>공급가격(예정)</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>A타입</td>
-                  <td>59.76㎡</td>
-                  <td>49.88㎡</td>
-                  <td>300세대</td>
-                  <td>3억 5천만원 ~ 4억 2천만원</td>
-                </tr>
-                <tr>
-                  <td>B타입</td>
-                  <td>74.32㎡</td>
-                  <td>59.98㎡</td>
-                  <td>350세대</td>
-                  <td>4억 5천만원 ~ 5억 5천만원</td>
-                </tr>
-                <tr>
-                  <td>C타입</td>
-                  <td>84.91㎡</td>
-                  <td>69.87㎡</td>
-                  <td>400세대</td>
-                  <td>5억 2천만원 ~ 6억 5천만원</td>
-                </tr>
-                <tr>
-                  <td>D타입</td>
-                  <td>102.44㎡</td>
-                  <td>84.76㎡</td>
-                  <td>150세대</td>
-                  <td>7억 ~ 9억원</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div
-            className="px-6 py-3 text-xs"
-            style={{ background: "var(--beige)", color: "#888" }}
-          >
-            ※ 공급가격은 층수 및 호수에 따라 상이하며, 확정 분양가는 분양공고 기준을 따릅니다.
-          </div>
+        {/* 안내 문구 */}
+        <div className="mt-10 p-5 rounded-xl text-sm" style={{ background: "var(--beige)", color: "var(--gray-dark)" }}>
+          <p className="font-semibold mb-1" style={{ color: "var(--primary)" }}>📌 주문 전 안내</p>
+          <ul className="space-y-1 text-sm">
+            <li>• 모든 가격은 VAT 포함 금액입니다.</li>
+            <li>• 리본 문구(보내는 분 · 받는 분) 맞춤 제작은 무료입니다.</li>
+            <li>• 오전 11시 이전 주문 시 당일 배달 가능합니다. (지역에 따라 상이)</li>
+            <li>• 사진과 실물은 재료 수급에 따라 다를 수 있으나 동급 이상으로 제작됩니다.</li>
+          </ul>
         </div>
       </div>
     </section>

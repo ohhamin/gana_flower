@@ -2,305 +2,351 @@
 
 import { useState } from "react";
 
-export default function Contact() {
-  const [form, setForm] = useState({
-    name: "",
-    phone: "",
-    unitType: "",
-    visitDate: "",
-    message: "",
-    agree: false,
-  });
-  const [submitted, setSubmitted] = useState(false);
-  const [errors, setErrors] = useState<Record<string, string>>({});
+type FormData = {
+  flowerType: string;
+  size: string;
+  senderName: string;
+  receiverName: string;
+  ribbon: string;
+  deliveryDate: string;
+  deliveryTime: string;
+  address: string;
+  phone: string;
+  memo: string;
+};
 
-  const validate = () => {
-    const newErrors: Record<string, string> = {};
-    if (!form.name.trim()) newErrors.name = "성함을 입력해 주세요.";
+const initialForm: FormData = {
+  flowerType: "",
+  size: "",
+  senderName: "",
+  receiverName: "",
+  ribbon: "",
+  deliveryDate: "",
+  deliveryTime: "",
+  address: "",
+  phone: "",
+  memo: "",
+};
+
+export default function Contact() {
+  const [form, setForm] = useState<FormData>(initialForm);
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<Partial<FormData>>({});
+
+  const validate = (): boolean => {
+    const newErrors: Partial<FormData> = {};
+    if (!form.flowerType) newErrors.flowerType = "화환 종류를 선택해 주세요.";
+    if (!form.size) newErrors.size = "사이즈를 선택해 주세요.";
+    if (!form.senderName.trim()) newErrors.senderName = "보내는 분 성함을 입력해 주세요.";
+    if (!form.receiverName.trim()) newErrors.receiverName = "받는 분 성함을 입력해 주세요.";
+    if (!form.deliveryDate) newErrors.deliveryDate = "배달 희망일을 선택해 주세요.";
+    if (!form.address.trim()) newErrors.address = "배달 주소를 입력해 주세요.";
     if (!form.phone.trim()) newErrors.phone = "연락처를 입력해 주세요.";
-    else if (!/^[0-9\-]{10,13}$/.test(form.phone.replace(/-/g, "")))
+    else if (!/^[0-9\-+]{9,15}$/.test(form.phone.replace(/\s/g, ""))) {
       newErrors.phone = "올바른 연락처를 입력해 주세요.";
-    if (!form.unitType) newErrors.unitType = "관심 평형을 선택해 주세요.";
-    if (!form.agree) newErrors.agree = "개인정보 수집에 동의해 주세요.";
-    return newErrors;
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+    if (errors[name as keyof FormData]) {
+      setErrors((prev) => ({ ...prev, [name]: undefined }));
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const errs = validate();
-    if (Object.keys(errs).length > 0) {
-      setErrors(errs);
-      return;
-    }
-    setErrors({});
-    setSubmitted(true);
+    if (!validate()) return;
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setSubmitted(true);
+    }, 1200);
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value, type } = e.target;
-    setForm((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
-    }));
-    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
+  const priceMap: Record<string, Record<string, string>> = {
+    "근조화환": { "소형": "55,000원", "중형": "85,000원", "대형": "130,000원", "특대형": "200,000원" },
+    "축하화환": { "소형": "60,000원", "중형": "90,000원", "대형": "140,000원", "특대형": "210,000원" },
+    "개업화환": { "소형": "65,000원", "중형": "95,000원", "대형": "150,000원", "특대형": "220,000원" },
+    "졸업화환": { "소형": "55,000원", "중형": "85,000원", "대형": "130,000원", "특대형": "190,000원" },
   };
+
+  const estimatedPrice = form.flowerType && form.size
+    ? priceMap[form.flowerType]?.[form.size] ?? "-"
+    : "-";
+
+  if (submitted) {
+    return (
+      <section id="contact" className="py-20 md:py-28" style={{ background: "var(--beige)" }}>
+        <div className="max-w-lg mx-auto px-6 text-center">
+          <div className="text-7xl mb-6">🌸</div>
+          <h2 className="text-2xl font-black mb-3" style={{ color: "var(--primary)" }}>
+            주문 접수가 완료되었습니다!
+          </h2>
+          <p className="text-base leading-relaxed mb-6" style={{ color: "var(--gray-dark)" }}>
+            담당자가 확인 후 30분 이내에 연락드리겠습니다.<br />
+            급한 경우 <strong style={{ color: "var(--pink)" }}>1588-3900</strong>으로 전화 주세요.
+          </p>
+          <button
+            onClick={() => { setSubmitted(false); setForm(initialForm); }}
+            className="btn-primary"
+          >
+            새 주문 신청하기
+          </button>
+        </div>
+      </section>
+    );
+  }
 
   return (
-    <section id="contact" className="py-20 md:py-28 bg-white">
+    <section id="contact" className="py-20 md:py-28" style={{ background: "var(--beige)" }}>
       <div className="max-w-6xl mx-auto px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-          {/* 왼쪽: 상담 정보 */}
-          <div>
-            <p className="section-subtitle mb-3">CONSULTATION</p>
-            <div className="gold-line" />
-            <h2 className="section-title mt-4 mb-4">
-              분양 상담 신청
-            </h2>
-            <p className="text-sm leading-relaxed mb-8" style={{ color: "#666" }}>
-              전문 상담사가 1:1로 안내해 드립니다.<br />
-              연락처를 남겨주시면 신속하게 연락드리겠습니다.
-            </p>
+        {/* 헤더 */}
+        <div className="text-center mb-12">
+          <span className="section-label">QUICK ORDER</span>
+          <h2 className="section-title">빠른 주문 신청</h2>
+          <div className="divider-line mx-auto" />
+          <p className="section-desc">
+            아래 양식을 작성하시면 담당자가 30분 이내에 연락드립니다.<br />
+            급한 주문은 <strong style={{ color: "var(--pink)" }}>☎ 1588-3900</strong>으로 연락주세요.
+          </p>
+        </div>
 
-            {/* 연락처 카드들 */}
-            <div className="flex flex-col gap-4 mb-8">
-              <div
-                className="flex items-center gap-4 p-5 rounded-xl"
-                style={{ background: "var(--beige)", border: "1px solid var(--border)" }}
-              >
-                <div
-                  className="w-12 h-12 rounded-full flex items-center justify-center text-xl flex-shrink-0"
-                  style={{ background: "var(--primary)", color: "var(--gold)" }}
-                >
-                  ☎
-                </div>
-                <div>
-                  <p className="text-xs mb-1" style={{ color: "#888" }}>분양 문의 전화</p>
-                  <a
-                    href="tel:1588-0000"
-                    className="font-black text-2xl"
-                    style={{ color: "var(--primary)" }}
-                  >
-                    1588-0000
-                  </a>
-                  <p className="text-xs mt-0.5" style={{ color: "#888" }}>
-                    매일 10:00 ~ 17:00 (연중무휴)
-                  </p>
-                </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* 주문 폼 */}
+          <form onSubmit={handleSubmit} className="lg:col-span-2 bg-white rounded-2xl p-7 border"
+            style={{ borderColor: "var(--border)" }}>
+            <h3 className="font-black text-lg mb-6" style={{ color: "var(--primary-dark)" }}>
+              📋 주문 정보 입력
+            </h3>
+
+            {/* 화환 종류 + 사이즈 */}
+            <div className="grid grid-cols-2 gap-4 mb-5">
+              <div>
+                <label className="block text-sm font-semibold mb-1.5" style={{ color: "var(--fg)" }}>
+                  화환 종류 <span style={{ color: "var(--pink)" }}>*</span>
+                </label>
+                <select name="flowerType" value={form.flowerType} onChange={handleChange} className="form-select">
+                  <option value="">선택하세요</option>
+                  <option>근조화환</option>
+                  <option>축하화환</option>
+                  <option>개업화환</option>
+                  <option>졸업화환</option>
+                </select>
+                {errors.flowerType && <p className="text-xs mt-1" style={{ color: "var(--pink)" }}>{errors.flowerType}</p>}
               </div>
-
-              <div
-                className="flex items-center gap-4 p-5 rounded-xl"
-                style={{ background: "var(--beige)", border: "1px solid var(--border)" }}
-              >
-                <div
-                  className="w-12 h-12 rounded-full flex items-center justify-center text-xl flex-shrink-0"
-                  style={{ background: "var(--primary)", color: "var(--gold)" }}
-                >
-                  📍
-                </div>
-                <div>
-                  <p className="text-xs mb-1" style={{ color: "#888" }}>모델하우스 주소</p>
-                  <p className="font-bold text-sm" style={{ color: "var(--primary)" }}>
-                    서울특별시 ○○구 ○○동 123-45
-                  </p>
-                  <p className="text-xs mt-0.5" style={{ color: "#888" }}>
-                    ○○역 2번 출구 도보 3분
-                  </p>
-                </div>
-              </div>
-
-              <div
-                className="flex items-center gap-4 p-5 rounded-xl"
-                style={{ background: "var(--beige)", border: "1px solid var(--border)" }}
-              >
-                <div
-                  className="w-12 h-12 rounded-full flex items-center justify-center text-xl flex-shrink-0"
-                  style={{ background: "#FEE500", color: "#000" }}
-                >
-                  💬
-                </div>
-                <div>
-                  <p className="text-xs mb-1" style={{ color: "#888" }}>카카오 채널 문의</p>
-                  <p className="font-bold text-sm" style={{ color: "var(--primary)" }}>
-                    @가나플라워분양
-                  </p>
-                  <p className="text-xs mt-0.5" style={{ color: "#888" }}>
-                    채팅으로 빠른 상담 가능
-                  </p>
-                </div>
+              <div>
+                <label className="block text-sm font-semibold mb-1.5" style={{ color: "var(--fg)" }}>
+                  사이즈 <span style={{ color: "var(--pink)" }}>*</span>
+                </label>
+                <select name="size" value={form.size} onChange={handleChange} className="form-select">
+                  <option value="">선택하세요</option>
+                  <option>소형</option>
+                  <option>중형</option>
+                  <option>대형</option>
+                  <option>특대형</option>
+                </select>
+                {errors.size && <p className="text-xs mt-1" style={{ color: "var(--pink)" }}>{errors.size}</p>}
               </div>
             </div>
-          </div>
 
-          {/* 오른쪽: 상담 신청 폼 */}
-          <div
-            className="rounded-2xl overflow-hidden shadow-md"
-            style={{ border: "1px solid var(--border)" }}
-          >
-            {submitted ? (
-              <div
-                className="flex flex-col items-center justify-center text-center p-12"
-                style={{ minHeight: "500px" }}
-              >
-                <div
-                  className="w-20 h-20 rounded-full flex items-center justify-center text-3xl mb-6"
-                  style={{ background: "var(--beige)", color: "var(--primary)" }}
-                >
-                  ✓
-                </div>
-                <h3 className="font-black text-2xl mb-3" style={{ color: "var(--primary)" }}>
-                  상담 신청 완료
-                </h3>
-                <p className="text-sm leading-relaxed mb-8" style={{ color: "#777" }}>
-                  소중한 상담 신청을 받았습니다.<br />
-                  빠른 시간 내에 전문 상담사가 연락드리겠습니다.
-                </p>
-                <button
-                  onClick={() => { setSubmitted(false); setForm({ name: "", phone: "", unitType: "", visitDate: "", message: "", agree: false }); }}
-                  className="btn-outline px-8 py-3"
-                >
-                  다시 신청하기
-                </button>
+            {/* 보내는/받는 분 */}
+            <div className="grid grid-cols-2 gap-4 mb-5">
+              <div>
+                <label className="block text-sm font-semibold mb-1.5" style={{ color: "var(--fg)" }}>
+                  보내는 분 <span style={{ color: "var(--pink)" }}>*</span>
+                </label>
+                <input
+                  type="text"
+                  name="senderName"
+                  value={form.senderName}
+                  onChange={handleChange}
+                  placeholder="성명 또는 회사명"
+                  className="form-input"
+                />
+                {errors.senderName && <p className="text-xs mt-1" style={{ color: "var(--pink)" }}>{errors.senderName}</p>}
               </div>
-            ) : (
-              <form onSubmit={handleSubmit} noValidate>
-                <div
-                  className="px-6 py-5"
-                  style={{ background: "var(--primary)", color: "#fff" }}
-                >
-                  <h3 className="font-bold text-lg">상담 신청서</h3>
-                  <p className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.7)" }}>
-                    * 표시 항목은 필수 입력사항입니다
-                  </p>
+              <div>
+                <label className="block text-sm font-semibold mb-1.5" style={{ color: "var(--fg)" }}>
+                  받는 분 <span style={{ color: "var(--pink)" }}>*</span>
+                </label>
+                <input
+                  type="text"
+                  name="receiverName"
+                  value={form.receiverName}
+                  onChange={handleChange}
+                  placeholder="성명 또는 상호명"
+                  className="form-input"
+                />
+                {errors.receiverName && <p className="text-xs mt-1" style={{ color: "var(--pink)" }}>{errors.receiverName}</p>}
+              </div>
+            </div>
+
+            {/* 리본 문구 */}
+            <div className="mb-5">
+              <label className="block text-sm font-semibold mb-1.5" style={{ color: "var(--fg)" }}>
+                리본 문구 <span style={{ color: "var(--gray)" }}>(선택 · 무료)</span>
+              </label>
+              <input
+                type="text"
+                name="ribbon"
+                value={form.ribbon}
+                onChange={handleChange}
+                placeholder="예) 삼가 고인의 명복을 빕니다 / 축 취임"
+                className="form-input"
+              />
+            </div>
+
+            {/* 배달 날짜 + 시간 */}
+            <div className="grid grid-cols-2 gap-4 mb-5">
+              <div>
+                <label className="block text-sm font-semibold mb-1.5" style={{ color: "var(--fg)" }}>
+                  배달 희망일 <span style={{ color: "var(--pink)" }}>*</span>
+                </label>
+                <input
+                  type="date"
+                  name="deliveryDate"
+                  value={form.deliveryDate}
+                  onChange={handleChange}
+                  className="form-input"
+                />
+                {errors.deliveryDate && <p className="text-xs mt-1" style={{ color: "var(--pink)" }}>{errors.deliveryDate}</p>}
+              </div>
+              <div>
+                <label className="block text-sm font-semibold mb-1.5" style={{ color: "var(--fg)" }}>
+                  희망 시간대
+                </label>
+                <select name="deliveryTime" value={form.deliveryTime} onChange={handleChange} className="form-select">
+                  <option value="">무관</option>
+                  <option>오전 (09:00~12:00)</option>
+                  <option>오후 (12:00~18:00)</option>
+                  <option>저녁 (18:00~22:00)</option>
+                  <option>새벽 (22:00~06:00)</option>
+                </select>
+              </div>
+            </div>
+
+            {/* 배달 주소 */}
+            <div className="mb-5">
+              <label className="block text-sm font-semibold mb-1.5" style={{ color: "var(--fg)" }}>
+                배달 주소 <span style={{ color: "var(--pink)" }}>*</span>
+              </label>
+              <input
+                type="text"
+                name="address"
+                value={form.address}
+                onChange={handleChange}
+                placeholder="예) 서울시 강남구 역삼동 ○○장례식장 3호실"
+                className="form-input"
+              />
+              {errors.address && <p className="text-xs mt-1" style={{ color: "var(--pink)" }}>{errors.address}</p>}
+            </div>
+
+            {/* 연락처 */}
+            <div className="mb-5">
+              <label className="block text-sm font-semibold mb-1.5" style={{ color: "var(--fg)" }}>
+                주문자 연락처 <span style={{ color: "var(--pink)" }}>*</span>
+              </label>
+              <input
+                type="tel"
+                name="phone"
+                value={form.phone}
+                onChange={handleChange}
+                placeholder="010-0000-0000"
+                className="form-input"
+              />
+              {errors.phone && <p className="text-xs mt-1" style={{ color: "var(--pink)" }}>{errors.phone}</p>}
+            </div>
+
+            {/* 메모 */}
+            <div className="mb-6">
+              <label className="block text-sm font-semibold mb-1.5" style={{ color: "var(--fg)" }}>
+                추가 요청사항
+              </label>
+              <textarea
+                name="memo"
+                value={form.memo}
+                onChange={handleChange}
+                placeholder="특별히 요청하실 사항을 적어주세요."
+                rows={3}
+                className="form-input resize-none"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-4 text-base font-black rounded-xl transition-all duration-200"
+              style={{
+                background: loading ? "#ccc" : "var(--pink)",
+                color: "#fff",
+                border: "none",
+                cursor: loading ? "not-allowed" : "pointer",
+              }}
+            >
+              {loading ? "⏳ 주문 접수 중..." : "🌸 주문 신청하기"}
+            </button>
+
+            <p className="text-xs text-center mt-3" style={{ color: "var(--gray)" }}>
+              * 접수 후 30분 이내에 담당자가 확인 전화를 드립니다.
+            </p>
+          </form>
+
+          {/* 사이드 정보 */}
+          <div className="flex flex-col gap-5">
+            {/* 예상 금액 */}
+            <div className="bg-white rounded-2xl p-6 border" style={{ borderColor: "var(--border)" }}>
+              <h4 className="font-black mb-4" style={{ color: "var(--primary-dark)" }}>💰 예상 금액</h4>
+              {form.flowerType && form.size ? (
+                <div>
+                  <div className="text-sm mb-1" style={{ color: "var(--gray)" }}>
+                    {form.flowerType} / {form.size}
+                  </div>
+                  <div className="text-3xl font-black" style={{ color: "var(--primary)" }}>
+                    {estimatedPrice}
+                  </div>
+                  <div className="text-xs mt-2" style={{ color: "var(--gray)" }}>
+                    배달비 무료 · VAT 포함
+                  </div>
                 </div>
-
-                <div className="p-6 flex flex-col gap-4" style={{ background: "#fff" }}>
-                  {/* 성함 */}
-                  <div>
-                    <label className="block text-xs font-bold mb-1.5" style={{ color: "#555" }}>
-                      성함 *
-                    </label>
-                    <input
-                      name="name"
-                      value={form.name}
-                      onChange={handleChange}
-                      placeholder="성함을 입력해 주세요"
-                      className="form-input"
-                      maxLength={20}
-                    />
-                    {errors.name && (
-                      <p className="text-xs mt-1" style={{ color: "#ef4444" }}>{errors.name}</p>
-                    )}
-                  </div>
-
-                  {/* 연락처 */}
-                  <div>
-                    <label className="block text-xs font-bold mb-1.5" style={{ color: "#555" }}>
-                      연락처 *
-                    </label>
-                    <input
-                      name="phone"
-                      value={form.phone}
-                      onChange={handleChange}
-                      placeholder="010-0000-0000"
-                      className="form-input"
-                      type="tel"
-                      maxLength={13}
-                    />
-                    {errors.phone && (
-                      <p className="text-xs mt-1" style={{ color: "#ef4444" }}>{errors.phone}</p>
-                    )}
-                  </div>
-
-                  {/* 관심 평형 */}
-                  <div>
-                    <label className="block text-xs font-bold mb-1.5" style={{ color: "#555" }}>
-                      관심 평형 *
-                    </label>
-                    <select
-                      name="unitType"
-                      value={form.unitType}
-                      onChange={handleChange}
-                      className="form-select"
-                    >
-                      <option value="">관심 평형을 선택해 주세요</option>
-                      <option value="A">A타입 (59㎡)</option>
-                      <option value="B">B타입 (74㎡)</option>
-                      <option value="C">C타입 (84㎡)</option>
-                      <option value="D">D타입 (102㎡)</option>
-                      <option value="미정">미정 (상담 후 결정)</option>
-                    </select>
-                    {errors.unitType && (
-                      <p className="text-xs mt-1" style={{ color: "#ef4444" }}>{errors.unitType}</p>
-                    )}
-                  </div>
-
-                  {/* 방문 희망일 */}
-                  <div>
-                    <label className="block text-xs font-bold mb-1.5" style={{ color: "#555" }}>
-                      방문 희망일
-                    </label>
-                    <input
-                      name="visitDate"
-                      value={form.visitDate}
-                      onChange={handleChange}
-                      type="date"
-                      className="form-input"
-                      min={new Date().toISOString().split("T")[0]}
-                    />
-                  </div>
-
-                  {/* 문의 내용 */}
-                  <div>
-                    <label className="block text-xs font-bold mb-1.5" style={{ color: "#555" }}>
-                      문의 내용
-                    </label>
-                    <textarea
-                      name="message"
-                      value={form.message}
-                      onChange={handleChange}
-                      placeholder="문의하실 내용을 자유롭게 작성해 주세요"
-                      className="form-input"
-                      style={{ resize: "vertical", minHeight: "90px" }}
-                      maxLength={500}
-                    />
-                  </div>
-
-                  {/* 개인정보 동의 */}
-                  <div
-                    className="rounded-xl p-4"
-                    style={{ background: "var(--beige)", border: errors.agree ? "1px solid #ef4444" : "1px solid var(--border)" }}
-                  >
-                    <p className="text-xs leading-relaxed mb-3" style={{ color: "#666" }}>
-                      <strong>개인정보 수집 및 이용 동의</strong><br />
-                      수집 항목: 성명, 연락처 / 수집 목적: 분양 상담 안내<br />
-                      보유 기간: 상담 완료 후 3개월, 미동의 시 상담 서비스 이용 제한
-                    </p>
-                    <label className="flex items-center gap-2.5 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        name="agree"
-                        checked={form.agree}
-                        onChange={handleChange}
-                        className="w-4 h-4 accent-green-800"
-                      />
-                      <span className="text-sm font-bold" style={{ color: "var(--primary)" }}>
-                        개인정보 수집 및 이용에 동의합니다 *
-                      </span>
-                    </label>
-                    {errors.agree && (
-                      <p className="text-xs mt-1" style={{ color: "#ef4444" }}>{errors.agree}</p>
-                    )}
-                  </div>
-
-                  <button type="submit" className="btn-primary w-full py-4 text-base mt-2">
-                    상담 신청하기 →
-                  </button>
+              ) : (
+                <div className="text-sm" style={{ color: "var(--gray)" }}>
+                  화환 종류와 사이즈를 선택하시면 예상 금액을 확인하실 수 있습니다.
                 </div>
-              </form>
-            )}
+              )}
+            </div>
+
+            {/* 전화 주문 */}
+            <div className="rounded-2xl p-6"
+              style={{ background: "linear-gradient(135deg, var(--primary-dark), var(--primary))", color: "#fff" }}>
+              <div className="text-3xl mb-3">☎</div>
+              <h4 className="font-black text-lg mb-1">전화로 빠르게!</h4>
+              <p className="text-sm mb-4" style={{ color: "rgba(255,255,255,0.8)" }}>
+                급한 주문은 전화가 가장 빠릅니다.<br />연중무휴 07:00~22:00
+              </p>
+              <a href="tel:1588-3900"
+                className="block text-center py-3 rounded-xl font-black text-lg"
+                style={{ background: "rgba(255,255,255,0.15)", color: "#fff", textDecoration: "none" }}>
+                1588-3900
+              </a>
+            </div>
+
+            {/* 카카오 */}
+            <div className="rounded-2xl p-6" style={{ background: "#FEE500" }}>
+              <div className="text-3xl mb-3">💬</div>
+              <h4 className="font-black text-lg mb-1" style={{ color: "#3C1E1E" }}>카카오톡 주문</h4>
+              <p className="text-sm mb-4" style={{ color: "#5a3a2a" }}>
+                카카오톡 채널에서<br />간편하게 주문하세요.
+              </p>
+              <div className="block text-center py-3 rounded-xl font-black"
+                style={{ background: "rgba(0,0,0,0.08)", color: "#3C1E1E" }}>
+                @가나플라워 채널 검색
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -2,248 +2,192 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const locationItems = [
+const steps = [
   {
-    category: "교통",
-    icon: "🚇",
-    color: "#2563eb",
-    items: [
-      { name: "지하철 2호선 ○○역", distance: "도보 5분" },
-      { name: "지하철 9호선 ○○역", distance: "도보 7분" },
-      { name: "올림픽대로 ○○IC", distance: "차량 3분" },
-      { name: "공항철도 ○○역", distance: "차량 10분" },
-    ],
+    step: "01",
+    icon: "📞",
+    title: "주문 접수",
+    desc: "전화, 카카오톡, 온라인 중 편한 방법으로 주문하세요. 연중무휴 07:00~22:00 접수 가능합니다.",
+    color: "var(--primary)",
+    bg: "#e8f5ed",
   },
   {
-    category: "교육",
-    icon: "🏫",
-    color: "#16a34a",
-    items: [
-      { name: "○○초등학교", distance: "도보 3분" },
-      { name: "○○중학교", distance: "도보 5분" },
-      { name: "○○고등학교", distance: "도보 8분" },
-      { name: "○○대학교", distance: "차량 10분" },
-    ],
+    step: "02",
+    icon: "✍️",
+    title: "리본 문구 확인",
+    desc: "보내시는 분과 받는 분 성함, 리본 문구를 확인합니다. 맞춤 문구 제작은 무료입니다.",
+    color: "var(--pink)",
+    bg: "var(--pink-pale)",
   },
   {
-    category: "편의시설",
-    icon: "🏪",
-    color: "#ea580c",
-    items: [
-      { name: "이마트 ○○점", distance: "도보 3분" },
-      { name: "○○대학병원", distance: "차량 5분" },
-      { name: "○○백화점", distance: "차량 7분" },
-      { name: "○○구청", distance: "차량 5분" },
-    ],
+    step: "03",
+    icon: "💐",
+    title: "신선한 생화 제작",
+    desc: "전문 플로리스트가 신선한 생화로 정성껏 제작합니다. 주문 후 30분 내 제작 완료됩니다.",
+    color: "var(--gold)",
+    bg: "#fff8e6",
   },
   {
-    category: "자연환경",
-    icon: "🌿",
-    color: "#15803d",
-    items: [
-      { name: "○○공원", distance: "도보 3분" },
-      { name: "○○한강공원", distance: "차량 5분" },
-      { name: "○○체육관", distance: "도보 10분" },
-      { name: "○○수목원", distance: "차량 15분" },
-    ],
+    step: "04",
+    icon: "🚚",
+    title: "신속 배달 완료",
+    desc: "전담 배달 기사가 지정 장소로 안전하게 배달합니다. 배달 완료 시 사진으로 확인해 드립니다.",
+    color: "#4a6278",
+    bg: "#f0f4f8",
+  },
+];
+
+const methods = [
+  {
+    icon: "☎️",
+    title: "전화 주문",
+    value: "1588-3900",
+    sub: "연중무휴 07:00 ~ 22:00",
+    desc: "전화 한 통으로 빠르게 주문하세요.",
+    color: "var(--primary)",
+    bg: "#e8f5ed",
+    action: "tel:1588-3900",
+    actionLabel: "전화하기",
+  },
+  {
+    icon: "💬",
+    title: "카카오톡 주문",
+    value: "가나플라워",
+    sub: "카카오 채널 검색",
+    desc: "카카오톡으로 편리하게 주문하세요.",
+    color: "#3C1E1E",
+    bg: "#FEF9C3",
+    action: "#contact",
+    actionLabel: "채널 연결",
+  },
+  {
+    icon: "🌐",
+    title: "온라인 주문",
+    value: "빠른 주문 폼",
+    sub: "24시간 접수 가능",
+    desc: "하단 주문 폼을 통해 간편하게 신청하세요.",
+    color: "var(--pink)",
+    bg: "var(--pink-pale)",
+    action: "#contact",
+    actionLabel: "주문 폼으로",
   },
 ];
 
 export default function Location() {
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
-  const [activeCategory, setActiveCategory] = useState("교통");
 
   useEffect(() => {
-    const obs = new IntersectionObserver(
+    const observer = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) setVisible(true); },
       { threshold: 0.1 }
     );
-    if (sectionRef.current) obs.observe(sectionRef.current);
-    return () => obs.disconnect();
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
   }, []);
 
-  const active = locationItems.find((l) => l.category === activeCategory)!;
+  const handleAction = (action: string) => {
+    if (action.startsWith("tel:")) {
+      window.location.href = action;
+    } else {
+      const id = action.replace("#", "");
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
-    <section id="location" ref={sectionRef} className="py-20 md:py-28 bg-white">
+    <section id="howtoorder" ref={ref} className="py-20 md:py-28" style={{ background: "var(--beige)" }}>
       <div className="max-w-6xl mx-auto px-6">
-        {/* 섹션 헤더 */}
-        <div
-          className="text-center mb-14"
-          style={{
-            opacity: visible ? 1 : 0,
-            transform: visible ? "none" : "translateY(30px)",
-            transition: "all 0.7s ease",
-          }}
-        >
-          <p className="section-subtitle mb-3">LOCATION</p>
-          <div className="gold-line mx-auto" />
-          <h2 className="section-title mt-4">입지 여건</h2>
-          <p className="mt-3 text-sm" style={{ color: "#888" }}>
-            최고의 생활 환경을 갖춘 최적의 입지
+        {/* 헤더 */}
+        <div className="text-center mb-16"
+          style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(30px)", transition: "all 0.7s" }}>
+          <span className="section-label">HOW TO ORDER</span>
+          <h2 className="section-title">주문 방법</h2>
+          <div className="divider-line mx-auto" />
+          <p className="section-desc">
+            전화, 카카오톡, 온라인 주문 폼으로 간편하게 주문하세요.<br />
+            친절한 상담원이 도와드립니다.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
-          {/* 지도 영역 */}
-          <div
-            className="rounded-2xl overflow-hidden shadow-md"
-            style={{
-              border: "1px solid var(--border)",
-              opacity: visible ? 1 : 0,
-              transform: visible ? "none" : "translateX(-30px)",
-              transition: "all 0.7s ease 0.2s",
-            }}
-          >
-            {/* 지도 대체 SVG */}
+        {/* 주문 방법 카드 */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-20">
+          {methods.map((method, i) => (
             <div
-              className="relative"
-              style={{ background: "#e8f0ec", minHeight: "400px" }}
+              key={i}
+              className="p-6 rounded-2xl border text-center transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+              style={{
+                background: method.bg,
+                borderColor: "transparent",
+                opacity: visible ? 1 : 0,
+                transform: visible ? "translateY(0)" : "translateY(30px)",
+                transition: `all 0.6s ease ${i * 0.15}s`,
+              }}
             >
-              <svg
-                viewBox="0 0 500 400"
-                width="100%"
-                xmlns="http://www.w3.org/2000/svg"
-                style={{ display: "block" }}
-              >
-                {/* 도로망 */}
-                <rect width="500" height="400" fill="#e8ede8" />
-                {/* 주요 도로 */}
-                <rect x="0" y="180" width="500" height="18" fill="#d4cfc0" />
-                <rect x="230" y="0" width="18" height="400" fill="#d4cfc0" />
-                {/* 보조 도로 */}
-                <rect x="0" y="100" width="500" height="8" fill="#ddd8c8" />
-                <rect x="0" y="290" width="500" height="8" fill="#ddd8c8" />
-                <rect x="120" y="0" width="8" height="400" fill="#ddd8c8" />
-                <rect x="360" y="0" width="8" height="400" fill="#ddd8c8" />
-                {/* 공원 */}
-                <rect x="30" y="30" width="80" height="60" rx="5" fill="#a8d5a2" />
-                <text x="70" y="65" textAnchor="middle" fontSize="10" fill="#2d5a2d">공원</text>
-                {/* 학교 */}
-                <rect x="370" y="50" width="70" height="50" rx="3" fill="#93c5fd" />
-                <text x="405" y="80" textAnchor="middle" fontSize="9" fill="#1e40af">학교</text>
-                {/* 마트 */}
-                <rect x="30" y="220" width="75" height="50" rx="3" fill="#fde68a" />
-                <text x="68" y="250" textAnchor="middle" fontSize="9" fill="#92400e">마트</text>
-                {/* 지하철역 */}
-                <circle cx="230" cy="100" r="15" fill="#3b82f6" />
-                <text x="230" y="104" textAnchor="middle" fontSize="10" fill="#fff" fontWeight="bold">M</text>
-                <text x="230" y="125" textAnchor="middle" fontSize="9" fill="#1e40af">○○역</text>
-                {/* 아파트 위치 (중앙) */}
-                <rect x="178" y="128" width="105" height="105" rx="6" fill="#1e3a2f" opacity="0.9" />
-                <text x="230" y="176" textAnchor="middle" fontSize="12" fill="#d4af55" fontWeight="bold">가나</text>
-                <text x="230" y="192" textAnchor="middle" fontSize="12" fill="#d4af55" fontWeight="bold">플라워</text>
-                {/* 핀 */}
-                <circle cx="230" cy="117" r="8" fill="#d4af55" />
-                <text x="230" y="121" textAnchor="middle" fontSize="10" fill="#fff">★</text>
-                {/* 범례 */}
-                <rect x="10" y="360" width="10" height="10" fill="#1e3a2f" rx="2" />
-                <text x="26" y="370" fontSize="9" fill="#555">가나 플라워</text>
-                <circle cx="120" cy="365" r="5" fill="#3b82f6" />
-                <text x="132" y="370" fontSize="9" fill="#555">지하철역</text>
-                <rect x="200" y="360" width="10" height="10" fill="#a8d5a2" rx="2" />
-                <text x="216" y="370" fontSize="9" fill="#555">공원</text>
-              </svg>
-              <div
-                className="absolute top-3 left-3 px-3 py-1.5 rounded-lg text-xs font-bold"
-                style={{ background: "rgba(30,58,47,0.9)", color: "#d4af55" }}
-              >
-                개략 위치도 (실제와 상이할 수 있음)
+              <div className="text-5xl mb-4">{method.icon}</div>
+              <div className="text-xs font-bold tracking-widest mb-1" style={{ color: method.color, opacity: 0.7 }}>
+                {method.sub}
               </div>
+              <h3 className="text-lg font-black mb-1" style={{ color: "#1a1a1a" }}>{method.title}</h3>
+              <p className="text-xl font-black mb-2" style={{ color: method.color }}>{method.value}</p>
+              <p className="text-sm mb-5" style={{ color: "var(--gray)" }}>{method.desc}</p>
+              <button
+                onClick={() => handleAction(method.action)}
+                className="w-full py-2.5 text-sm font-bold rounded-lg border-2 transition-all duration-200"
+                style={{
+                  borderColor: method.color,
+                  color: method.color,
+                  background: "transparent",
+                  cursor: "pointer",
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.background = method.color;
+                  (e.currentTarget as HTMLButtonElement).style.color = "#fff";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.background = "transparent";
+                  (e.currentTarget as HTMLButtonElement).style.color = method.color;
+                }}
+              >
+                {method.actionLabel} →
+              </button>
             </div>
-          </div>
+          ))}
+        </div>
 
-          {/* 입지 정보 */}
-          <div
-            style={{
-              opacity: visible ? 1 : 0,
-              transform: visible ? "none" : "translateX(30px)",
-              transition: "all 0.7s ease 0.3s",
-            }}
-          >
-            {/* 카테고리 탭 */}
-            <div className="flex gap-2 mb-6 flex-wrap">
-              {locationItems.map((loc) => (
-                <button
-                  key={loc.category}
-                  onClick={() => setActiveCategory(loc.category)}
-                  className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-bold transition-all"
-                  style={{
-                    background: activeCategory === loc.category ? loc.color : "#f5f5f5",
-                    color: activeCategory === loc.category ? "#fff" : "#666",
-                    border: "none",
-                    cursor: "pointer",
-                  }}
-                >
-                  <span>{loc.icon}</span>
-                  <span>{loc.category}</span>
-                </button>
-              ))}
-            </div>
-
-            {/* 선택된 카테고리 항목 */}
-            <div className="flex flex-col gap-3">
-              {active.items.map((item, i) => (
-                <div
-                  key={item.name}
-                  className="flex items-center justify-between p-4 rounded-xl"
-                  style={{
-                    background: "#fff",
-                    border: "1px solid var(--border)",
-                    animationDelay: `${i * 0.1}s`,
-                  }}
-                >
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="w-2 h-2 rounded-full flex-shrink-0"
-                      style={{ background: active.color }}
-                    />
-                    <span className="text-sm font-medium" style={{ color: "#333" }}>
-                      {item.name}
-                    </span>
-                  </div>
-                  <span
-                    className="text-xs font-bold px-3 py-1 rounded-full"
-                    style={{ background: `${active.color}15`, color: active.color }}
-                  >
-                    {item.distance}
-                  </span>
+        {/* 주문 프로세스 */}
+        <div className="mb-6 text-center">
+          <h3 className="text-xl font-black" style={{ color: "var(--primary-dark)" }}>
+            주문부터 배달까지, 4단계
+          </h3>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {steps.map((step, i) => (
+            <div
+              key={i}
+              className="relative p-6 rounded-2xl"
+              style={{
+                background: step.bg,
+                opacity: visible ? 1 : 0,
+                transform: visible ? "translateY(0)" : "translateY(30px)",
+                transition: `all 0.6s ease ${0.3 + i * 0.1}s`,
+              }}
+            >
+              {/* 연결선 (마지막 제외) */}
+              {i < steps.length - 1 && (
+                <div className="hidden lg:block absolute top-1/2 -right-2 z-10 text-gray-300 text-xl">
+                  →
                 </div>
-              ))}
-            </div>
-
-            {/* 모델하우스 정보 */}
-            <div
-              className="mt-6 p-5 rounded-xl"
-              style={{ background: "var(--primary)", color: "#fff" }}
-            >
-              <h4 className="font-bold mb-3" style={{ color: "var(--gold)" }}>
-                📍 모델하우스 위치
-              </h4>
-              <p className="text-sm mb-1" style={{ color: "rgba(255,255,255,0.9)" }}>
-                서울특별시 ○○구 ○○동 123-45
-              </p>
-              <p className="text-xs mb-4" style={{ color: "rgba(255,255,255,0.6)" }}>
-                운영시간: 매일 10:00 ~ 17:00 (연중무휴)
-              </p>
-              <div className="flex gap-3">
-                <a
-                  href="tel:1588-0000"
-                  className="btn-gold text-sm py-2.5 px-4"
-                >
-                  ☎ 1588-0000
-                </a>
-                <button
-                  className="btn-outline text-sm py-2.5 px-4"
-                  style={{ borderColor: "rgba(255,255,255,0.4)", color: "#fff" }}
-                  onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
-                >
-                  방문 예약
-                </button>
+              )}
+              <div className="text-3xl mb-3">{step.icon}</div>
+              <div className="text-xs font-black tracking-widest mb-1" style={{ color: step.color, opacity: 0.5 }}>
+                STEP {step.step}
               </div>
+              <h4 className="font-black text-base mb-2" style={{ color: "#1a1a1a" }}>{step.title}</h4>
+              <p className="text-sm leading-relaxed" style={{ color: "var(--gray-dark)" }}>{step.desc}</p>
             </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>

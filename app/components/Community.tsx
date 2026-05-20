@@ -2,260 +2,197 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const facilities = [
+const reviews = [
   {
-    category: "스포츠",
-    icon: "🏊",
-    name: "실내 수영장",
-    desc: "25m 레인 6개, 어린이 풀 포함, 연중 상시 운영",
-    size: "1,200㎡",
+    name: "김○○",
+    date: "2026.05.15",
+    rating: 5,
+    type: "근조화환",
+    title: "급하게 주문했는데 3시간 만에 도착했어요",
+    content: "부친상 소식에 급히 연락했더니 너무 친절하게 상담해 주셨어요. 화환도 생각보다 훨씬 고급스럽고 풍성했습니다. 배달 완료 사진까지 보내주셔서 걱정 없었어요.",
+    avatar: "🧑",
+    verified: true,
   },
   {
-    category: "스포츠",
-    icon: "💪",
-    name: "피트니스 센터",
-    desc: "최신 운동 기구 완비, GX룸·스트레칭존 포함",
-    size: "650㎡",
+    name: "이○○",
+    date: "2026.05.12",
+    rating: 5,
+    type: "개업화환",
+    title: "사장님이 너무 좋아하셨어요!",
+    content: "지인 가게 개업 선물로 화환을 보냈는데, 꽃이 정말 신선하고 화려했다며 칭찬을 많이 받았습니다. 리본 문구도 원하는 대로 예쁘게 써주셔서 감사합니다.",
+    avatar: "👩",
+    verified: true,
   },
   {
-    category: "스포츠",
-    icon: "⛳",
-    name: "스크린 골프장",
-    desc: "4개 부스 운영, 최신 시뮬레이터 탑재",
-    size: "280㎡",
+    name: "박○○",
+    date: "2026.05.10",
+    rating: 5,
+    type: "축하화환",
+    title: "가격 대비 퀄리티가 최고입니다",
+    content: "다른 업체보다 가격도 합리적이고 꽃 품질이 훨씬 좋았어요. 이번이 두 번째 이용인데 앞으로도 계속 여기서 주문할 것 같아요. 강력 추천합니다!",
+    avatar: "👨",
+    verified: true,
   },
   {
-    category: "문화",
-    icon: "📚",
-    name: "독서실 · 스터디룸",
-    desc: "개인석 60석, 그룹 스터디룸 4개실",
-    size: "420㎡",
+    name: "최○○",
+    date: "2026.05.07",
+    rating: 5,
+    type: "졸업화환",
+    title: "딸 졸업식에 깜짝 선물로 보냈어요",
+    content: "졸업식장 입구에 화환이 딱 놓여있으니 아이가 너무 감동받았다고 연락이 왔어요. 시간 맞춰 정확히 배달해 주신 덕분에 특별한 추억이 됐습니다.",
+    avatar: "👵",
+    verified: true,
   },
   {
-    category: "문화",
-    icon: "🎬",
-    name: "영화 상영관",
-    desc: "70석 규모, 4K 빔 시스템, 주민 전용 상영",
-    size: "350㎡",
+    name: "정○○",
+    date: "2026.05.03",
+    rating: 5,
+    type: "근조화환",
+    title: "전화 한 통으로 모든 게 해결됐어요",
+    content: "갑작스러운 부고 소식에 당황했는데 전화하니 바로 친절하게 안내해 주셨어요. 새벽에도 배달이 된다고 해서 정말 안심했습니다. 앞으로도 자주 이용할게요.",
+    avatar: "🧓",
+    verified: true,
   },
   {
-    category: "라이프",
-    icon: "☕",
-    name: "카페테리아 라운지",
-    desc: "커피머신·공유주방 완비, 입주민 전용 공간",
-    size: "320㎡",
-  },
-  {
-    category: "라이프",
-    icon: "🧒",
-    name: "어린이 놀이방",
-    desc: "안전 인증 놀이시설, 보육 교사 상주",
-    size: "280㎡",
-  },
-  {
-    category: "라이프",
-    icon: "🏨",
-    name: "게스트하우스",
-    desc: "4개실 운영, 방문 가족·지인 저렴 이용 가능",
-    size: "200㎡",
+    name: "한○○",
+    date: "2026.04.28",
+    rating: 4,
+    type: "개업화환",
+    title: "빠른 배달과 친절한 서비스!",
+    content: "주문 후 배달까지 4시간 정도 걸렸어요. 서울 외곽인데도 빠르게 배달해 주셔서 감사했습니다. 꽃도 싱싱하고 포장도 깔끔했어요.",
+    avatar: "👦",
+    verified: true,
   },
 ];
 
-const categories = ["전체", "스포츠", "문화", "라이프"];
-
 export default function Community() {
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
-  const [filter, setFilter] = useState("전체");
 
   useEffect(() => {
-    const obs = new IntersectionObserver(
+    const observer = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) setVisible(true); },
       { threshold: 0.1 }
     );
-    if (sectionRef.current) obs.observe(sectionRef.current);
-    return () => obs.disconnect();
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
   }, []);
 
-  const filtered = filter === "전체" ? facilities : facilities.filter((f) => f.category === filter);
+  const typeColors: Record<string, { bg: string; color: string }> = {
+    "근조화환": { bg: "#f0f4f8", color: "#4a6278" },
+    "축하화환": { bg: "var(--pink-pale)", color: "var(--pink)" },
+    "개업화환": { bg: "#fff8e6", color: "var(--gold)" },
+    "졸업화환": { bg: "#e8f5ed", color: "var(--primary)" },
+  };
 
   return (
-    <section
-      id="community"
-      ref={sectionRef}
-      className="py-20 md:py-28"
-      style={{ background: "var(--gray-light)" }}
-    >
+    <section id="reviews" ref={ref} className="py-20 md:py-28" style={{ background: "var(--beige)" }}>
       <div className="max-w-6xl mx-auto px-6">
-        {/* 섹션 헤더 */}
-        <div
-          className="text-center mb-14"
-          style={{
-            opacity: visible ? 1 : 0,
-            transform: visible ? "none" : "translateY(30px)",
-            transition: "all 0.7s ease",
-          }}
-        >
-          <p className="section-subtitle mb-3">COMMUNITY</p>
-          <div className="gold-line mx-auto" />
-          <h2 className="section-title mt-4">
-            프리미엄<br />커뮤니티 시설
-          </h2>
-          <p className="mt-3 text-sm" style={{ color: "#888" }}>
-            일상이 특별해지는 고품격 커뮤니티 공간
+        {/* 헤더 */}
+        <div className="text-center mb-14"
+          style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(30px)", transition: "all 0.7s" }}>
+          <span className="section-label">CUSTOMER REVIEWS</span>
+          <h2 className="section-title">고객 후기</h2>
+          <div className="divider-line mx-auto" />
+          <p className="section-desc">
+            가나플라워를 이용해 주신 고객님들의 진솔한 후기를 확인하세요.
           </p>
-        </div>
 
-        {/* 총 규모 배너 */}
-        <div
-          className="rounded-2xl p-8 mb-10 text-center"
-          style={{
-            background: "var(--primary)",
-            opacity: visible ? 1 : 0,
-            transform: visible ? "none" : "translateY(20px)",
-            transition: "all 0.7s ease 0.2s",
-          }}
-        >
-          <p className="text-sm font-medium mb-2" style={{ color: "rgba(255,255,255,0.7)" }}>
-            커뮤니티 총 시설 규모
-          </p>
-          <div
-            className="font-black mb-2"
-            style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)", color: "var(--gold)" }}
-          >
-            총 4,500㎡ (약 1,360평)
+          {/* 통합 평점 */}
+          <div className="inline-flex items-center gap-6 mt-6 px-8 py-4 rounded-2xl"
+            style={{ background: "#fff", border: "1px solid var(--border)" }}>
+            <div className="text-center">
+              <div className="text-4xl font-black" style={{ color: "var(--primary)" }}>4.9</div>
+              <div className="text-yellow-400 text-lg">★★★★★</div>
+              <div className="text-xs mt-0.5" style={{ color: "var(--gray)" }}>종합 평점</div>
+            </div>
+            <div className="w-px h-12 bg-gray-200" />
+            <div className="text-center">
+              <div className="text-4xl font-black" style={{ color: "var(--primary)" }}>15K+</div>
+              <div className="text-xs mt-1" style={{ color: "var(--gray)" }}>누적 리뷰</div>
+            </div>
+            <div className="w-px h-12 bg-gray-200" />
+            <div className="text-center">
+              <div className="text-4xl font-black" style={{ color: "var(--primary)" }}>98%</div>
+              <div className="text-xs mt-1" style={{ color: "var(--gray)" }}>재구매율</div>
+            </div>
           </div>
-          <p style={{ color: "rgba(255,255,255,0.8)", fontSize: "0.9rem" }}>
-            세대당 3.75㎡의 넓은 커뮤니티 공간 제공
-          </p>
         </div>
 
-        {/* 필터 */}
-        <div
-          className="flex gap-2 mb-8 flex-wrap"
-          style={{
-            opacity: visible ? 1 : 0,
-            transition: "all 0.7s ease 0.3s",
-          }}
-        >
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setFilter(cat)}
-              className="px-5 py-2 rounded-full text-sm font-bold transition-all"
-              style={{
-                background: filter === cat ? "var(--primary)" : "#fff",
-                color: filter === cat ? "#fff" : "#666",
-                border: `1px solid ${filter === cat ? "var(--primary)" : "var(--border)"}`,
-                cursor: "pointer",
-              }}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-
-        {/* 시설 카드 그리드 */}
-        <div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5"
-          style={{
-            opacity: visible ? 1 : 0,
-            transition: "all 0.7s ease 0.4s",
-          }}
-        >
-          {filtered.map((fac, i) => (
-            <div
-              key={fac.name}
-              className="rounded-xl p-5 hover:shadow-md transition-shadow duration-300 group"
-              style={{
-                background: "#fff",
-                border: "1px solid var(--border)",
-              }}
-            >
-              <div className="flex items-center justify-between mb-3">
-                <div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl group-hover:scale-110 transition-transform duration-300"
-                  style={{ background: "var(--beige)" }}
-                >
-                  {fac.icon}
-                </div>
-                <span
-                  className="text-xs font-bold px-2.5 py-1 rounded-full"
-                  style={{ background: "var(--beige)", color: "var(--primary)" }}
-                >
-                  {fac.category}
-                </span>
-              </div>
-              <h4
-                className="font-bold text-base mb-1"
-                style={{ color: "var(--primary)" }}
-              >
-                {fac.name}
-              </h4>
-              <p className="text-xs leading-relaxed mb-3" style={{ color: "#777" }}>
-                {fac.desc}
-              </p>
+        {/* 후기 그리드 */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {reviews.map((review, i) => {
+            const tc = typeColors[review.type] || { bg: "#f0f0f0", color: "#888" };
+            return (
               <div
-                className="text-xs font-bold pt-3"
+                key={i}
+                className="bg-white rounded-2xl p-6 border transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
                 style={{
-                  color: "var(--gold)",
-                  borderTop: "1px solid var(--border)",
+                  borderColor: "var(--border)",
+                  opacity: visible ? 1 : 0,
+                  transform: visible ? "translateY(0)" : "translateY(30px)",
+                  transition: `all 0.6s ease ${i * 0.08}s`,
                 }}
               >
-                규모: {fac.size}
+                {/* 상단 */}
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center text-xl"
+                      style={{ background: "var(--beige)" }}>
+                      {review.avatar}
+                    </div>
+                    <div>
+                      <div className="font-bold text-sm">{review.name}</div>
+                      <div className="text-xs" style={{ color: "var(--gray)" }}>{review.date}</div>
+                    </div>
+                  </div>
+                  <span className="text-xs px-2 py-0.5 rounded-full font-semibold"
+                    style={{ background: tc.bg, color: tc.color }}>
+                    {review.type}
+                  </span>
+                </div>
+
+                {/* 별점 */}
+                <div className="flex items-center gap-1 mb-2">
+                  {Array.from({ length: 5 }).map((_, j) => (
+                    <span key={j} style={{ color: j < review.rating ? "#f59e0b" : "#e0e0e0" }}>★</span>
+                  ))}
+                  {review.verified && (
+                    <span className="ml-2 text-xs px-1.5 py-0.5 rounded font-semibold"
+                      style={{ background: "#e8f5ed", color: "var(--primary)" }}>
+                      ✓ 구매 인증
+                    </span>
+                  )}
+                </div>
+
+                {/* 제목 */}
+                <h3 className="font-black text-sm mb-2" style={{ color: "#1a1a1a" }}>
+                  {review.title}
+                </h3>
+
+                {/* 내용 */}
+                <p className="text-sm leading-relaxed" style={{ color: "var(--gray-dark)" }}>
+                  {review.content}
+                </p>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
-        {/* 주민 혜택 섹션 */}
-        <div
-          className="mt-10 rounded-2xl p-8 md:p-10"
-          style={{
-            background: "#fff",
-            border: "1px solid var(--border)",
-            opacity: visible ? 1 : 0,
-            transition: "all 0.7s ease 0.5s",
-          }}
-        >
-          <h3 className="font-bold text-lg mb-6" style={{ color: "var(--primary)" }}>
-            🎁 입주민 전용 혜택
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[
-              {
-                title: "커뮤니티 무료 이용",
-                desc: "피트니스, 독서실, 어린이 놀이방 월정액 무료",
-              },
-              {
-                title: "스마트홈 앱 제공",
-                desc: "난방·전기·보안 원격 제어 IoT 시스템 기본 탑재",
-              },
-              {
-                title: "1년 무상 AS",
-                desc: "입주 후 1년간 마감재·설비 하자 무상 수리 보장",
-              },
-            ].map((benefit) => (
-              <div
-                key={benefit.title}
-                className="flex gap-3"
-              >
-                <span
-                  className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5"
-                  style={{ background: "var(--primary)", color: "var(--gold)" }}
-                >
-                  ✓
-                </span>
-                <div>
-                  <p className="font-bold text-sm mb-1" style={{ color: "var(--primary)" }}>
-                    {benefit.title}
-                  </p>
-                  <p className="text-xs leading-relaxed" style={{ color: "#777" }}>
-                    {benefit.desc}
-                  </p>
-                </div>
-              </div>
-            ))}
+        {/* 더보기 안내 */}
+        <div className="text-center mt-10">
+          <p className="text-sm mb-4" style={{ color: "var(--gray)" }}>
+            더 많은 후기는 네이버, 카카오 플레이스에서 확인하실 수 있습니다.
+          </p>
+          <div className="flex justify-center gap-3">
+            <span className="px-5 py-2 rounded-full text-sm font-semibold border"
+              style={{ borderColor: "var(--border)", color: "var(--gray-dark)" }}>
+              🟢 네이버 리뷰 1,240건
+            </span>
+            <span className="px-5 py-2 rounded-full text-sm font-semibold border"
+              style={{ borderColor: "var(--border)", color: "var(--gray-dark)" }}>
+              💛 카카오 리뷰 982건
+            </span>
           </div>
         </div>
       </div>
