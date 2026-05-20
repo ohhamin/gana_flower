@@ -202,14 +202,14 @@ export default function Units() {
   };
 
   return (
-    <section id="products" className="py-20 md:py-28" style={{ background: "#fff" }}>
-      <div className="max-w-6xl mx-auto px-6">
+    <section id="products" className="py-16 md:py-28" style={{ background: "#fff" }}>
+      <div className="max-w-6xl mx-auto px-5 md:px-6">
         {/* 헤더 */}
-        <div className="text-center mb-10">
+        <div className="text-center mb-10 md:mb-12">
           <span className="section-label">PRODUCTS</span>
           <h2 className="section-title">화환 상품 안내</h2>
           <div className="divider-line mx-auto" />
-          <p className="section-desc">
+          <p className="section-desc max-w-lg mx-auto">
             상황에 맞는 화환을 선택하시면 전문 플로리스트가 정성껏 제작해 드립니다.<br />
             리본 문구 맞춤 제작 무료 · 당일 배달 가능
           </p>
@@ -221,7 +221,8 @@ export default function Units() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`tab-btn flex items-center gap-1.5 ${activeTab === tab.id ? "active" : ""}`}
+              className={`tab-btn flex items-center gap-2 ${activeTab === tab.id ? "active" : ""}`}
+              style={{ fontSize: "0.95rem", padding: "0.85rem 1.4rem" }}
             >
               <span>{tab.emoji}</span>
               {tab.label}
@@ -242,7 +243,7 @@ export default function Units() {
               {/* 인기 표시 */}
               {product.popular && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
-                  <span className="px-3 py-1 text-xs font-bold rounded-full text-white"
+                  <span className="px-3 py-1 text-sm font-bold rounded-full text-white"
                     style={{ background: "var(--pink)" }}>
                     ★ 가장 인기
                   </span>
@@ -250,12 +251,12 @@ export default function Units() {
               )}
 
               {/* 이미지 영역 */}
-              <div className="relative h-44 flex items-center justify-center overflow-hidden"
+              <div className="relative h-48 flex items-center justify-center overflow-hidden"
                 style={{ background: product.bg }}>
-                <span className="text-7xl select-none">{product.emoji}</span>
+                <span className="text-8xl select-none">{product.emoji}</span>
                 {product.badge && (
                   <div className="absolute top-3 left-3">
-                    <span className={`badge badge-${product.badgeType}`}>
+                    <span className={`badge badge-${product.badgeType}`} style={{ fontSize: "0.8rem", padding: "0.25rem 0.65rem" }}>
                       {product.badge}
                     </span>
                   </div>
@@ -263,31 +264,31 @@ export default function Units() {
               </div>
 
               {/* 상품 정보 */}
-              <div className="p-4">
-                <div className="text-xs text-gray-400 mb-1">{product.size}</div>
-                <h3 className="font-bold text-base mb-1" style={{ color: "var(--fg)" }}>
+              <div className="p-5">
+                <div className="text-sm mb-1.5" style={{ color: "var(--gray)" }}>{product.size}</div>
+                <h3 className="font-bold text-lg mb-2" style={{ color: "var(--fg)" }}>
                   {product.name}
                 </h3>
-                <p className="text-xs mb-3 leading-relaxed" style={{ color: "var(--gray)" }}>
+                <p className="text-sm mb-4 leading-relaxed" style={{ color: "var(--gray)" }}>
                   {product.desc}
                 </p>
 
                 {/* 가격 */}
-                <div className="flex items-baseline gap-2 mb-4">
+                <div className="flex items-baseline gap-2 mb-5">
                   {product.originalPrice && (
                     <span className="text-sm line-through" style={{ color: "#bbb" }}>
                       {product.originalPrice}원
                     </span>
                   )}
-                  <span className="text-xl font-black" style={{ color: "var(--primary)" }}>
+                  <span className="text-2xl font-black" style={{ color: "var(--primary)" }}>
                     {product.price}
-                    <span className="text-sm font-semibold">원</span>
+                    <span className="text-base font-semibold">원</span>
                   </span>
                 </div>
 
                 <button
                   onClick={scrollToContact}
-                  className="w-full py-2.5 text-sm font-bold rounded-lg transition-all duration-200"
+                  className="w-full py-3 text-base font-bold rounded-lg transition-all duration-200"
                   style={{
                     background: product.popular ? "var(--pink)" : "var(--primary)",
                     color: "#fff",
@@ -303,9 +304,9 @@ export default function Units() {
         </div>
 
         {/* 안내 문구 */}
-        <div className="mt-10 p-5 rounded-xl text-sm" style={{ background: "var(--beige)", color: "var(--gray-dark)" }}>
-          <p className="font-semibold mb-1" style={{ color: "var(--primary)" }}>📌 주문 전 안내</p>
-          <ul className="space-y-1 text-sm">
+        <div className="mt-10 p-6 rounded-xl text-base" style={{ background: "var(--beige)", color: "var(--gray-dark)" }}>
+          <p className="font-bold mb-3 text-lg" style={{ color: "var(--primary)" }}>📌 주문 전 안내</p>
+          <ul className="space-y-2">
             <li>• 모든 가격은 VAT 포함 금액입니다.</li>
             <li>• 리본 문구(보내는 분 · 받는 분) 맞춤 제작은 무료입니다.</li>
             <li>• 오전 11시 이전 주문 시 당일 배달 가능합니다. (지역에 따라 상이)</li>

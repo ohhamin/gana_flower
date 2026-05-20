@@ -81,19 +81,19 @@ export default function Contact() {
 
   if (submitted) {
     return (
-      <section id="contact" className="py-20 md:py-28" style={{ background: "var(--beige)" }}>
+      <section id="contact" className="py-16 md:py-28" style={{ background: "var(--beige)" }}>
         <div className="max-w-lg mx-auto px-6 text-center">
-          <div className="text-7xl mb-6">🌸</div>
-          <h2 className="text-2xl font-black mb-3" style={{ color: "var(--primary)" }}>
-            주문 접수가 완료되었습니다!
+          <div className="text-8xl mb-6">🌸</div>
+          <h2 className="text-3xl font-black mb-4" style={{ color: "var(--primary)" }}>
+            주문 접수 완료!
           </h2>
-          <p className="text-base leading-relaxed mb-6" style={{ color: "var(--gray-dark)" }}>
+          <p className="text-lg leading-relaxed mb-8" style={{ color: "var(--gray-dark)" }}>
             담당자가 확인 후 30분 이내에 연락드리겠습니다.<br />
             급한 경우 <strong style={{ color: "var(--pink)" }}>1588-3900</strong>으로 전화 주세요.
           </p>
           <button
             onClick={() => { setSubmitted(false); setForm(initialForm); }}
-            className="btn-primary"
+            className="btn-primary text-base"
           >
             새 주문 신청하기
           </button>
@@ -103,14 +103,14 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="py-20 md:py-28" style={{ background: "var(--beige)" }}>
-      <div className="max-w-6xl mx-auto px-6">
+    <section id="contact" className="py-16 md:py-28" style={{ background: "var(--beige)" }}>
+      <div className="max-w-6xl mx-auto px-5 md:px-6">
         {/* 헤더 */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-10 md:mb-12">
           <span className="section-label">QUICK ORDER</span>
           <h2 className="section-title">빠른 주문 신청</h2>
           <div className="divider-line mx-auto" />
-          <p className="section-desc">
+          <p className="section-desc max-w-lg mx-auto">
             아래 양식을 작성하시면 담당자가 30분 이내에 연락드립니다.<br />
             급한 주문은 <strong style={{ color: "var(--pink)" }}>☎ 1588-3900</strong>으로 연락주세요.
           </p>
@@ -118,16 +118,16 @@ export default function Contact() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* 주문 폼 */}
-          <form onSubmit={handleSubmit} className="lg:col-span-2 bg-white rounded-2xl p-7 border"
+          <form onSubmit={handleSubmit} className="lg:col-span-2 bg-white rounded-2xl p-6 md:p-8 border"
             style={{ borderColor: "var(--border)" }}>
-            <h3 className="font-black text-lg mb-6" style={{ color: "var(--primary-dark)" }}>
+            <h3 className="font-black text-xl mb-7" style={{ color: "var(--primary-dark)" }}>
               📋 주문 정보 입력
             </h3>
 
-            {/* 화환 종류 + 사이즈 */}
-            <div className="grid grid-cols-2 gap-4 mb-5">
+            {/* 화환 종류 + 사이즈 - 모바일 단일 컬럼 */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
               <div>
-                <label className="block text-sm font-semibold mb-1.5" style={{ color: "var(--fg)" }}>
+                <label className="block text-base font-semibold mb-2" style={{ color: "var(--fg)" }}>
                   화환 종류 <span style={{ color: "var(--pink)" }}>*</span>
                 </label>
                 <select name="flowerType" value={form.flowerType} onChange={handleChange} className="form-select">
@@ -137,10 +137,10 @@ export default function Contact() {
                   <option>개업화환</option>
                   <option>졸업화환</option>
                 </select>
-                {errors.flowerType && <p className="text-xs mt-1" style={{ color: "var(--pink)" }}>{errors.flowerType}</p>}
+                {errors.flowerType && <p className="text-sm mt-1.5" style={{ color: "var(--pink)" }}>{errors.flowerType}</p>}
               </div>
               <div>
-                <label className="block text-sm font-semibold mb-1.5" style={{ color: "var(--fg)" }}>
+                <label className="block text-base font-semibold mb-2" style={{ color: "var(--fg)" }}>
                   사이즈 <span style={{ color: "var(--pink)" }}>*</span>
                 </label>
                 <select name="size" value={form.size} onChange={handleChange} className="form-select">
@@ -150,14 +150,14 @@ export default function Contact() {
                   <option>대형</option>
                   <option>특대형</option>
                 </select>
-                {errors.size && <p className="text-xs mt-1" style={{ color: "var(--pink)" }}>{errors.size}</p>}
+                {errors.size && <p className="text-sm mt-1.5" style={{ color: "var(--pink)" }}>{errors.size}</p>}
               </div>
             </div>
 
-            {/* 보내는/받는 분 */}
-            <div className="grid grid-cols-2 gap-4 mb-5">
+            {/* 보내는/받는 분 - 모바일 단일 컬럼 */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
               <div>
-                <label className="block text-sm font-semibold mb-1.5" style={{ color: "var(--fg)" }}>
+                <label className="block text-base font-semibold mb-2" style={{ color: "var(--fg)" }}>
                   보내는 분 <span style={{ color: "var(--pink)" }}>*</span>
                 </label>
                 <input
@@ -168,10 +168,10 @@ export default function Contact() {
                   placeholder="성명 또는 회사명"
                   className="form-input"
                 />
-                {errors.senderName && <p className="text-xs mt-1" style={{ color: "var(--pink)" }}>{errors.senderName}</p>}
+                {errors.senderName && <p className="text-sm mt-1.5" style={{ color: "var(--pink)" }}>{errors.senderName}</p>}
               </div>
               <div>
-                <label className="block text-sm font-semibold mb-1.5" style={{ color: "var(--fg)" }}>
+                <label className="block text-base font-semibold mb-2" style={{ color: "var(--fg)" }}>
                   받는 분 <span style={{ color: "var(--pink)" }}>*</span>
                 </label>
                 <input
@@ -182,14 +182,14 @@ export default function Contact() {
                   placeholder="성명 또는 상호명"
                   className="form-input"
                 />
-                {errors.receiverName && <p className="text-xs mt-1" style={{ color: "var(--pink)" }}>{errors.receiverName}</p>}
+                {errors.receiverName && <p className="text-sm mt-1.5" style={{ color: "var(--pink)" }}>{errors.receiverName}</p>}
               </div>
             </div>
 
             {/* 리본 문구 */}
-            <div className="mb-5">
-              <label className="block text-sm font-semibold mb-1.5" style={{ color: "var(--fg)" }}>
-                리본 문구 <span style={{ color: "var(--gray)" }}>(선택 · 무료)</span>
+            <div className="mb-6">
+              <label className="block text-base font-semibold mb-2" style={{ color: "var(--fg)" }}>
+                리본 문구 <span style={{ color: "var(--gray)", fontWeight: 400 }}>(선택 · 무료)</span>
               </label>
               <input
                 type="text"
@@ -201,10 +201,10 @@ export default function Contact() {
               />
             </div>
 
-            {/* 배달 날짜 + 시간 */}
-            <div className="grid grid-cols-2 gap-4 mb-5">
+            {/* 배달 날짜 + 시간 - 모바일 단일 컬럼 */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
               <div>
-                <label className="block text-sm font-semibold mb-1.5" style={{ color: "var(--fg)" }}>
+                <label className="block text-base font-semibold mb-2" style={{ color: "var(--fg)" }}>
                   배달 희망일 <span style={{ color: "var(--pink)" }}>*</span>
                 </label>
                 <input
@@ -214,10 +214,10 @@ export default function Contact() {
                   onChange={handleChange}
                   className="form-input"
                 />
-                {errors.deliveryDate && <p className="text-xs mt-1" style={{ color: "var(--pink)" }}>{errors.deliveryDate}</p>}
+                {errors.deliveryDate && <p className="text-sm mt-1.5" style={{ color: "var(--pink)" }}>{errors.deliveryDate}</p>}
               </div>
               <div>
-                <label className="block text-sm font-semibold mb-1.5" style={{ color: "var(--fg)" }}>
+                <label className="block text-base font-semibold mb-2" style={{ color: "var(--fg)" }}>
                   희망 시간대
                 </label>
                 <select name="deliveryTime" value={form.deliveryTime} onChange={handleChange} className="form-select">
@@ -231,8 +231,8 @@ export default function Contact() {
             </div>
 
             {/* 배달 주소 */}
-            <div className="mb-5">
-              <label className="block text-sm font-semibold mb-1.5" style={{ color: "var(--fg)" }}>
+            <div className="mb-6">
+              <label className="block text-base font-semibold mb-2" style={{ color: "var(--fg)" }}>
                 배달 주소 <span style={{ color: "var(--pink)" }}>*</span>
               </label>
               <input
@@ -243,12 +243,12 @@ export default function Contact() {
                 placeholder="예) 서울시 강남구 역삼동 ○○장례식장 3호실"
                 className="form-input"
               />
-              {errors.address && <p className="text-xs mt-1" style={{ color: "var(--pink)" }}>{errors.address}</p>}
+              {errors.address && <p className="text-sm mt-1.5" style={{ color: "var(--pink)" }}>{errors.address}</p>}
             </div>
 
             {/* 연락처 */}
-            <div className="mb-5">
-              <label className="block text-sm font-semibold mb-1.5" style={{ color: "var(--fg)" }}>
+            <div className="mb-6">
+              <label className="block text-base font-semibold mb-2" style={{ color: "var(--fg)" }}>
                 주문자 연락처 <span style={{ color: "var(--pink)" }}>*</span>
               </label>
               <input
@@ -259,12 +259,12 @@ export default function Contact() {
                 placeholder="010-0000-0000"
                 className="form-input"
               />
-              {errors.phone && <p className="text-xs mt-1" style={{ color: "var(--pink)" }}>{errors.phone}</p>}
+              {errors.phone && <p className="text-sm mt-1.5" style={{ color: "var(--pink)" }}>{errors.phone}</p>}
             </div>
 
             {/* 메모 */}
-            <div className="mb-6">
-              <label className="block text-sm font-semibold mb-1.5" style={{ color: "var(--fg)" }}>
+            <div className="mb-7">
+              <label className="block text-base font-semibold mb-2" style={{ color: "var(--fg)" }}>
                 추가 요청사항
               </label>
               <textarea
@@ -280,7 +280,7 @@ export default function Contact() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-4 text-base font-black rounded-xl transition-all duration-200"
+              className="w-full py-4 text-lg font-black rounded-xl transition-all duration-200"
               style={{
                 background: loading ? "#ccc" : "var(--pink)",
                 color: "#fff",
@@ -291,7 +291,7 @@ export default function Contact() {
               {loading ? "⏳ 주문 접수 중..." : "🌸 주문 신청하기"}
             </button>
 
-            <p className="text-xs text-center mt-3" style={{ color: "var(--gray)" }}>
+            <p className="text-sm text-center mt-3" style={{ color: "var(--gray)" }}>
               * 접수 후 30분 이내에 담당자가 확인 전화를 드립니다.
             </p>
           </form>
@@ -300,49 +300,49 @@ export default function Contact() {
           <div className="flex flex-col gap-5">
             {/* 예상 금액 */}
             <div className="bg-white rounded-2xl p-6 border" style={{ borderColor: "var(--border)" }}>
-              <h4 className="font-black mb-4" style={{ color: "var(--primary-dark)" }}>💰 예상 금액</h4>
+              <h4 className="font-black text-lg mb-4" style={{ color: "var(--primary-dark)" }}>💰 예상 금액</h4>
               {form.flowerType && form.size ? (
                 <div>
-                  <div className="text-sm mb-1" style={{ color: "var(--gray)" }}>
+                  <div className="text-base mb-2" style={{ color: "var(--gray)" }}>
                     {form.flowerType} / {form.size}
                   </div>
-                  <div className="text-3xl font-black" style={{ color: "var(--primary)" }}>
+                  <div className="text-4xl font-black" style={{ color: "var(--primary)" }}>
                     {estimatedPrice}
                   </div>
-                  <div className="text-xs mt-2" style={{ color: "var(--gray)" }}>
+                  <div className="text-sm mt-2" style={{ color: "var(--gray)" }}>
                     배달비 무료 · VAT 포함
                   </div>
                 </div>
               ) : (
-                <div className="text-sm" style={{ color: "var(--gray)" }}>
+                <div className="text-base" style={{ color: "var(--gray)" }}>
                   화환 종류와 사이즈를 선택하시면 예상 금액을 확인하실 수 있습니다.
                 </div>
               )}
             </div>
 
             {/* 전화 주문 */}
-            <div className="rounded-2xl p-6"
+            <div className="rounded-2xl p-7"
               style={{ background: "linear-gradient(135deg, var(--primary-dark), var(--primary))", color: "#fff" }}>
-              <div className="text-3xl mb-3">☎</div>
-              <h4 className="font-black text-lg mb-1">전화로 빠르게!</h4>
-              <p className="text-sm mb-4" style={{ color: "rgba(255,255,255,0.8)" }}>
+              <div className="text-4xl mb-4">☎</div>
+              <h4 className="font-black text-xl mb-2">전화로 빠르게!</h4>
+              <p className="text-base mb-5" style={{ color: "rgba(255,255,255,0.8)" }}>
                 급한 주문은 전화가 가장 빠릅니다.<br />연중무휴 07:00~22:00
               </p>
               <a href="tel:1588-3900"
-                className="block text-center py-3 rounded-xl font-black text-lg"
+                className="block text-center py-3.5 rounded-xl font-black text-xl"
                 style={{ background: "rgba(255,255,255,0.15)", color: "#fff", textDecoration: "none" }}>
                 1588-3900
               </a>
             </div>
 
             {/* 카카오 */}
-            <div className="rounded-2xl p-6" style={{ background: "#FEE500" }}>
-              <div className="text-3xl mb-3">💬</div>
-              <h4 className="font-black text-lg mb-1" style={{ color: "#3C1E1E" }}>카카오톡 주문</h4>
-              <p className="text-sm mb-4" style={{ color: "#5a3a2a" }}>
+            <div className="rounded-2xl p-7" style={{ background: "#FEE500" }}>
+              <div className="text-4xl mb-4">💬</div>
+              <h4 className="font-black text-xl mb-2" style={{ color: "#3C1E1E" }}>카카오톡 주문</h4>
+              <p className="text-base mb-5" style={{ color: "#5a3a2a" }}>
                 카카오톡 채널에서<br />간편하게 주문하세요.
               </p>
-              <div className="block text-center py-3 rounded-xl font-black"
+              <div className="block text-center py-3.5 rounded-xl font-black text-base"
                 style={{ background: "rgba(0,0,0,0.08)", color: "#3C1E1E" }}>
                 @가나플라워 채널 검색
               </div>
