@@ -60,26 +60,26 @@ export default function Sales() {
   }, []);
 
   return (
-    <section id="delivery" ref={ref} className="py-20 md:py-28" style={{ background: "#fff" }}>
-      <div className="max-w-6xl mx-auto px-6">
+    <section id="delivery" ref={ref} className="py-16 md:py-28" style={{ background: "#fff" }}>
+      <div className="max-w-6xl mx-auto px-5 md:px-6">
         {/* 헤더 */}
-        <div className="text-center mb-14"
+        <div className="text-center mb-12 md:mb-14"
           style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(30px)", transition: "all 0.7s" }}>
           <span className="section-label">DELIVERY INFO</span>
           <h2 className="section-title">배송 안내</h2>
           <div className="divider-line mx-auto" />
-          <p className="section-desc">
+          <p className="section-desc max-w-lg mx-auto">
             전국 어디든 빠르고 안전하게 배달해 드립니다.<br />
             급한 상황을 위한 새벽·야간 배달도 가능합니다.
           </p>
         </div>
 
         {/* 배달 특징 */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-14">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12 md:mb-14">
           {deliveryInfo.map((item, i) => (
             <div
               key={i}
-              className="flex gap-4 p-5 rounded-2xl border transition-all duration-300"
+              className="flex gap-5 p-6 rounded-2xl border transition-all duration-300"
               style={{
                 background: item.highlight ? "linear-gradient(135deg, var(--primary-dark), var(--primary))" : "var(--beige)",
                 borderColor: item.highlight ? "transparent" : "var(--border)",
@@ -89,10 +89,10 @@ export default function Sales() {
                 transition: `all 0.6s ease ${i * 0.1}s`,
               }}
             >
-              <div className="text-3xl flex-shrink-0">{item.icon}</div>
+              <div className="text-4xl flex-shrink-0">{item.icon}</div>
               <div>
-                <h3 className="font-black text-base mb-1">{item.title}</h3>
-                <p className="text-sm leading-relaxed"
+                <h3 className="font-black text-lg mb-2">{item.title}</h3>
+                <p className="text-base leading-relaxed"
                   style={{ color: item.highlight ? "rgba(255,255,255,0.85)" : "var(--gray-dark)" }}>
                   {item.desc}
                 </p>
@@ -103,27 +103,27 @@ export default function Sales() {
 
         {/* 지역별 배달 시간 */}
         <div
-          className="mb-14"
+          className="mb-12 md:mb-14"
           style={{ opacity: visible ? 1 : 0, transition: "opacity 0.7s 0.3s" }}
         >
-          <h3 className="text-lg font-black mb-5" style={{ color: "var(--primary-dark)" }}>
+          <h3 className="text-xl font-black mb-5" style={{ color: "var(--primary-dark)" }}>
             📍 지역별 배달 시간
           </h3>
           <div className="overflow-x-auto rounded-xl border" style={{ borderColor: "var(--border)" }}>
-            <table className="w-full text-sm">
+            <table className="w-full text-base">
               <thead>
                 <tr style={{ background: "var(--primary)", color: "#fff" }}>
-                  <th className="px-5 py-3 text-left font-semibold">지역</th>
-                  <th className="px-5 py-3 text-center font-semibold">예상 배달 시간</th>
-                  <th className="px-5 py-3 text-center font-semibold">배달비</th>
+                  <th className="px-5 py-4 text-left font-semibold">지역</th>
+                  <th className="px-5 py-4 text-center font-semibold">예상 배달 시간</th>
+                  <th className="px-5 py-4 text-center font-semibold">배달비</th>
                 </tr>
               </thead>
               <tbody>
                 {regions.map((r, i) => (
                   <tr key={i} style={{ background: i % 2 === 0 ? "#fff" : "var(--beige)" }}>
-                    <td className="px-5 py-3 font-semibold" style={{ color: "var(--primary)" }}>{r.name}</td>
-                    <td className="px-5 py-3 text-center" style={{ color: "var(--gray-dark)" }}>{r.time}</td>
-                    <td className="px-5 py-3 text-center font-semibold"
+                    <td className="px-5 py-4 font-semibold" style={{ color: "var(--primary)" }}>{r.name}</td>
+                    <td className="px-5 py-4 text-center" style={{ color: "var(--gray-dark)" }}>{r.time}</td>
+                    <td className="px-5 py-4 text-center font-semibold"
                       style={{ color: r.fee === "무료" ? "var(--primary)" : "var(--pink)" }}>
                       {r.fee}
                     </td>
@@ -132,7 +132,7 @@ export default function Sales() {
               </tbody>
             </table>
           </div>
-          <p className="text-xs mt-2" style={{ color: "var(--gray)" }}>
+          <p className="text-sm mt-3" style={{ color: "var(--gray)" }}>
             ※ 배달 시간은 주문 접수 후 기준이며, 교통 상황에 따라 달라질 수 있습니다.
           </p>
         </div>
@@ -146,15 +146,15 @@ export default function Sales() {
             transition: "opacity 0.7s 0.5s",
           }}
         >
-          <h3 className="text-lg font-black mb-6 text-center" style={{ color: "var(--primary-dark)" }}>
+          <h3 className="text-xl font-black mb-8 text-center" style={{ color: "var(--primary-dark)" }}>
             🌸 가나플라워 품질 보장 약속
           </h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             {guarantees.map((g, i) => (
               <div key={i} className="text-center">
-                <div className="text-3xl mb-2">{g.icon}</div>
-                <div className="font-black text-sm mb-1" style={{ color: "var(--primary)" }}>{g.title}</div>
-                <div className="text-xs" style={{ color: "var(--gray-dark)" }}>{g.desc}</div>
+                <div className="text-4xl mb-3">{g.icon}</div>
+                <div className="font-black text-base mb-2" style={{ color: "var(--primary)" }}>{g.title}</div>
+                <div className="text-sm leading-relaxed" style={{ color: "var(--gray-dark)" }}>{g.desc}</div>
               </div>
             ))}
           </div>

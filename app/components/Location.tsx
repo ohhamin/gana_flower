@@ -97,26 +97,26 @@ export default function Location() {
   };
 
   return (
-    <section id="howtoorder" ref={ref} className="py-20 md:py-28" style={{ background: "var(--beige)" }}>
-      <div className="max-w-6xl mx-auto px-6">
+    <section id="howtoorder" ref={ref} className="py-16 md:py-28" style={{ background: "var(--beige)" }}>
+      <div className="max-w-6xl mx-auto px-5 md:px-6">
         {/* 헤더 */}
-        <div className="text-center mb-16"
+        <div className="text-center mb-12 md:mb-16"
           style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(30px)", transition: "all 0.7s" }}>
           <span className="section-label">HOW TO ORDER</span>
           <h2 className="section-title">주문 방법</h2>
           <div className="divider-line mx-auto" />
-          <p className="section-desc">
+          <p className="section-desc max-w-lg mx-auto">
             전화, 카카오톡, 온라인 주문 폼으로 간편하게 주문하세요.<br />
             친절한 상담원이 도와드립니다.
           </p>
         </div>
 
         {/* 주문 방법 카드 */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-16 md:mb-20">
           {methods.map((method, i) => (
             <div
               key={i}
-              className="p-6 rounded-2xl border text-center transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+              className="p-7 rounded-2xl border text-center transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
               style={{
                 background: method.bg,
                 borderColor: "transparent",
@@ -125,16 +125,16 @@ export default function Location() {
                 transition: `all 0.6s ease ${i * 0.15}s`,
               }}
             >
-              <div className="text-5xl mb-4">{method.icon}</div>
-              <div className="text-xs font-bold tracking-widest mb-1" style={{ color: method.color, opacity: 0.7 }}>
+              <div className="text-5xl mb-5">{method.icon}</div>
+              <div className="text-sm font-bold tracking-widest mb-2" style={{ color: method.color, opacity: 0.7 }}>
                 {method.sub}
               </div>
-              <h3 className="text-lg font-black mb-1" style={{ color: "#1a1a1a" }}>{method.title}</h3>
-              <p className="text-xl font-black mb-2" style={{ color: method.color }}>{method.value}</p>
-              <p className="text-sm mb-5" style={{ color: "var(--gray)" }}>{method.desc}</p>
+              <h3 className="text-xl font-black mb-2" style={{ color: "#1a1a1a" }}>{method.title}</h3>
+              <p className="text-xl font-black mb-3" style={{ color: method.color }}>{method.value}</p>
+              <p className="text-base mb-6" style={{ color: "var(--gray)" }}>{method.desc}</p>
               <button
                 onClick={() => handleAction(method.action)}
-                className="w-full py-2.5 text-sm font-bold rounded-lg border-2 transition-all duration-200"
+                className="w-full py-3 text-base font-bold rounded-lg border-2 transition-all duration-200"
                 style={{
                   borderColor: method.color,
                   color: method.color,
@@ -157,8 +157,8 @@ export default function Location() {
         </div>
 
         {/* 주문 프로세스 */}
-        <div className="mb-6 text-center">
-          <h3 className="text-xl font-black" style={{ color: "var(--primary-dark)" }}>
+        <div className="mb-8 text-center">
+          <h3 className="text-2xl font-black" style={{ color: "var(--primary-dark)" }}>
             주문부터 배달까지, 4단계
           </h3>
         </div>
@@ -180,11 +180,11 @@ export default function Location() {
                   →
                 </div>
               )}
-              <div className="text-3xl mb-3">{step.icon}</div>
-              <div className="text-xs font-black tracking-widest mb-1" style={{ color: step.color, opacity: 0.5 }}>
+              <div className="text-4xl mb-4">{step.icon}</div>
+              <div className="text-xs font-black tracking-widest mb-1.5" style={{ color: step.color, opacity: 0.5 }}>
                 STEP {step.step}
               </div>
-              <h4 className="font-black text-base mb-2" style={{ color: "#1a1a1a" }}>{step.title}</h4>
+              <h4 className="font-black text-lg mb-3" style={{ color: "#1a1a1a" }}>{step.title}</h4>
               <p className="text-sm leading-relaxed" style={{ color: "var(--gray-dark)" }}>{step.desc}</p>
             </div>
           ))}

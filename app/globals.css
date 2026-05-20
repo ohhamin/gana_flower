@@ -48,16 +48,16 @@ body {
 /* 공통 섹션 타이틀 */
 .section-label {
   display: inline-block;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--pink);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
 }
 
 .section-title {
-  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-size: clamp(1.75rem, 4vw, 2.4rem);
   font-weight: 800;
   color: var(--primary-dark);
   letter-spacing: -0.03em;
@@ -65,10 +65,10 @@ body {
 }
 
 .section-desc {
-  font-size: 0.95rem;
+  font-size: clamp(0.95rem, 2.5vw, 1.05rem);
   color: var(--gray);
-  line-height: 1.8;
-  margin-top: 0.75rem;
+  line-height: 1.85;
+  margin-top: 0.875rem;
 }
 
 .divider-line {
@@ -76,7 +76,7 @@ body {
   height: 3px;
   background: linear-gradient(90deg, var(--primary), var(--pink));
   border-radius: 2px;
-  margin: 1rem 0;
+  margin: 1.1rem 0;
 }
 
 /* 버튼 */
@@ -194,11 +194,11 @@ body {
 /* 폼 */
 .form-input {
   width: 100%;
-  padding: 0.85rem 1rem;
+  padding: 0.95rem 1.1rem;
   border: 1.5px solid var(--border);
-  border-radius: 6px;
+  border-radius: 8px;
   background: #fff;
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: var(--fg);
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
@@ -212,11 +212,11 @@ body {
 
 .form-select {
   width: 100%;
-  padding: 0.85rem 1rem;
+  padding: 0.95rem 1.1rem;
   border: 1.5px solid var(--border);
-  border-radius: 6px;
+  border-radius: 8px;
   background: #fff;
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: var(--fg);
   outline: none;
   transition: border-color 0.2s;

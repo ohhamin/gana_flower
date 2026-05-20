@@ -3,11 +3,9 @@
 import { useState, useEffect } from "react";
 
 const navItems = [
-  { label: "화환 소개", href: "#intro" },
   { label: "상품 안내", href: "#products" },
   { label: "주문 방법", href: "#howtoorder" },
   { label: "배송 안내", href: "#delivery" },
-  { label: "고객 후기", href: "#reviews" },
   { label: "빠른 주문", href: "#contact" },
 ];
 
@@ -19,7 +17,7 @@ export default function Header() {
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 80);
-      const sectionIds = ["intro", "products", "howtoorder", "delivery", "reviews", "contact"];
+      const sectionIds = ["products", "howtoorder", "delivery", "contact"];
       for (let i = sectionIds.length - 1; i >= 0; i--) {
         const el = document.getElementById(sectionIds[i]);
         if (el && window.scrollY >= el.offsetTop - 120) {
@@ -67,7 +65,7 @@ export default function Header() {
           backdropFilter: scrolled ? "blur(10px)" : "none",
         }}
       >
-        <div className="max-w-6xl mx-auto px-6 flex items-center justify-between h-16 md:h-20">
+        <div className="max-w-6xl mx-auto px-5 flex items-center justify-between h-16 md:h-20">
           {/* 로고 */}
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
@@ -135,6 +133,14 @@ export default function Header() {
               style={{ background: "var(--pink)", color: "#fff", textDecoration: "none" }}>
               ☎ 빠른 주문
             </a>
+            {/* 모바일 전화 버튼 */}
+            <a href="tel:1588-3900"
+              className="md:hidden flex items-center justify-center w-10 h-10 rounded-full"
+              style={{ background: "var(--pink)", color: "#fff", textDecoration: "none" }}>
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/>
+              </svg>
+            </a>
             {/* 모바일 햄버거 */}
             <button
               className="md:hidden flex flex-col gap-1.5 p-2 bg-transparent border-none cursor-pointer"
@@ -153,15 +159,15 @@ export default function Header() {
 
         {/* 모바일 메뉴 */}
         <div className="md:hidden overflow-hidden transition-all duration-300"
-          style={{ maxHeight: menuOpen ? "420px" : "0", borderTop: menuOpen ? "1px solid var(--border)" : "none" }}>
+          style={{ maxHeight: menuOpen ? "340px" : "0", borderTop: menuOpen ? "1px solid var(--border)" : "none" }}>
           <nav className="flex flex-col bg-white">
             {navItems.map((item) => (
               <button
                 key={item.href}
                 onClick={() => handleNavClick(item.href)}
-                className="px-6 py-4 text-left text-sm"
+                className="px-6 py-4 text-left text-base"
                 style={{
-                  color: activeNav === item.href ? "var(--primary)" : "#555",
+                  color: activeNav === item.href ? "var(--primary)" : "#444",
                   fontWeight: activeNav === item.href ? "700" : "500",
                   background: activeNav === item.href ? "var(--pink-pale)" : "transparent",
                   border: "none",
@@ -172,15 +178,15 @@ export default function Header() {
                 {item.label}
               </button>
             ))}
-            <div className="flex gap-2 mx-6 my-4">
+            <div className="flex gap-3 mx-5 my-4">
               <a href="tel:1588-3900"
-                className="flex-1 text-center py-3 rounded-full font-bold text-sm"
+                className="flex-1 text-center py-3.5 rounded-full font-bold text-base"
                 style={{ background: "var(--pink)", color: "#fff", textDecoration: "none" }}>
                 ☎ 1588-3900
               </a>
               <a href="#contact"
                 onClick={(e) => { e.preventDefault(); handleNavClick("#contact"); }}
-                className="flex-1 text-center py-3 rounded-full font-bold text-sm"
+                className="flex-1 text-center py-3.5 rounded-full font-bold text-base"
                 style={{ background: "#FEE500", color: "#3C1E1E", textDecoration: "none" }}>
                 카카오 주문
               </a>

@@ -69,72 +69,85 @@ export default function Hero() {
 
   return (
     <section
-      className="relative min-h-[580px] md:min-h-[680px] flex items-center overflow-hidden"
+      className="relative min-h-[520px] md:min-h-[680px] flex items-center overflow-hidden"
       style={{ background: slide.gradient, transition: "background 0.6s ease" }}
     >
       {/* 배경 장식 원 */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-20 -right-20 w-96 h-96 rounded-full"
-          style={{ background: "rgba(255,255,255,0.06)" }} />
-        <div className="absolute -bottom-32 -left-16 w-80 h-80 rounded-full"
           style={{ background: "rgba(255,255,255,0.05)" }} />
+        <div className="absolute -bottom-32 -left-16 w-80 h-80 rounded-full"
+          style={{ background: "rgba(255,255,255,0.04)" }} />
       </div>
 
       <div className="relative max-w-6xl mx-auto px-6 py-16 md:py-20 w-full">
         <div className="flex flex-col md:flex-row items-center justify-between gap-10">
           {/* 텍스트 영역 */}
           <div
-            className="flex-1 text-white"
+            className="flex-1 text-white w-full"
             style={{
               opacity: animating ? 0 : 1,
               transform: animating ? "translateY(20px)" : "translateY(0)",
               transition: "opacity 0.4s, transform 0.4s",
             }}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold mb-5"
-              style={{ background: "rgba(255,255,255,0.15)" }}>
+            {/* 태그 */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold mb-6"
+              style={{ background: "rgba(255,255,255,0.18)" }}>
               <span className="w-2 h-2 rounded-full bg-white animate-pulse inline-block" />
               {slide.tag}
             </div>
 
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-tight mb-4 whitespace-pre-line"
-              style={{ letterSpacing: "-0.03em", textShadow: "0 2px 20px rgba(0,0,0,0.2)" }}>
+            {/* 메인 타이틀 */}
+            <h1 className="font-black leading-tight mb-5 whitespace-pre-line"
+              style={{
+                fontSize: "clamp(2.2rem, 6vw, 3.8rem)",
+                letterSpacing: "-0.03em",
+                textShadow: "0 2px 20px rgba(0,0,0,0.2)",
+              }}>
               {slide.title}
             </h1>
 
-            <p className="text-base md:text-lg leading-relaxed mb-2 whitespace-pre-line"
-              style={{ color: "rgba(255,255,255,0.85)" }}>
+            {/* 설명 */}
+            <p className="leading-relaxed mb-3 whitespace-pre-line"
+              style={{
+                fontSize: "clamp(1rem, 2.5vw, 1.15rem)",
+                color: "rgba(255,255,255,0.88)",
+              }}>
               {slide.desc}
             </p>
 
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-8 mt-2"
-              style={{ background: "rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.9)" }}>
+            {/* 배지 */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold mb-8 mt-1"
+              style={{ background: "rgba(255,255,255,0.12)", color: "rgba(255,255,255,0.95)" }}>
               ✓ {slide.badge}
             </div>
 
-            <div className="flex flex-wrap gap-3">
+            {/* CTA 버튼 */}
+            <div className="flex flex-col sm:flex-row gap-3">
               <button
                 onClick={() => scrollTo(slide.ctaHref)}
-                className="btn-pink"
-                style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem" }}
+                className="btn-pink text-base"
+                style={{ paddingLeft: "2rem", paddingRight: "2rem", paddingTop: "1rem", paddingBottom: "1rem" }}
               >
                 {slide.cta} →
               </button>
-              <a href="tel:1588-3900" className="btn-outline-white">
+              <a href="tel:1588-3900" className="btn-outline-white text-base"
+                style={{ paddingTop: "1rem", paddingBottom: "1rem" }}>
                 ☎ 1588-3900 전화 주문
               </a>
             </div>
           </div>
 
-          {/* 꽃 비주얼 */}
+          {/* 꽃 비주얼 - 모바일에서 숨김 */}
           <div
-            className="flex-shrink-0 relative"
+            className="hidden md:block flex-shrink-0 relative"
             style={{ opacity: animating ? 0 : 1, transition: "opacity 0.4s" }}
           >
-            <div className="relative w-56 h-56 md:w-72 md:h-72">
+            <div className="relative w-72 h-72">
               <div className="absolute inset-0 rounded-full"
                 style={{ background: "rgba(255,255,255,0.08)" }} />
-              <div className="absolute inset-0 flex items-center justify-center text-8xl md:text-9xl animate-float select-none">
+              <div className="absolute inset-0 flex items-center justify-center text-9xl animate-float select-none">
                 {slide.flowers[0]}
               </div>
               {[
@@ -169,12 +182,6 @@ export default function Hero() {
             />
           ))}
         </div>
-      </div>
-
-      {/* 하단 스크롤 유도 */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-white opacity-50">
-        <span className="text-xs tracking-widest">SCROLL</span>
-        <div className="w-px h-8 bg-white" />
       </div>
     </section>
   );
