@@ -7,33 +7,29 @@ const steps = [
     step: "01",
     icon: "📞",
     title: "주문 접수",
-    desc: "전화, 카카오톡, 온라인 중 편한 방법으로 주문하세요. 연중무휴 07:00~22:00 접수 가능합니다.",
+    desc: "전화·카카오·온라인 폼으로\n연중무휴 07:00~22:00 접수",
     color: "var(--primary)",
-    bg: "#e8f5ed",
   },
   {
     step: "02",
     icon: "✍️",
     title: "리본 문구 확인",
-    desc: "보내시는 분과 받는 분 성함, 리본 문구를 확인합니다. 맞춤 문구 제작은 무료입니다.",
+    desc: "보내는 분·받는 분 성함,\n리본 문구 맞춤 제작 (무료)",
     color: "var(--pink)",
-    bg: "var(--pink-pale)",
   },
   {
     step: "03",
     icon: "💐",
-    title: "신선한 생화 제작",
-    desc: "전문 플로리스트가 신선한 생화로 정성껏 제작합니다. 주문 후 30분 내 제작 완료됩니다.",
+    title: "신선 생화 제작",
+    desc: "전문 플로리스트가\n신선한 생화로 정성껏 제작",
     color: "var(--gold)",
-    bg: "#fff8e6",
   },
   {
     step: "04",
     icon: "🚚",
     title: "신속 배달 완료",
-    desc: "전담 배달 기사가 지정 장소로 안전하게 배달합니다. 배달 완료 시 사진으로 확인해 드립니다.",
+    desc: "지정 장소 배달 후\n완료 사진을 전송해 드립니다",
     color: "#4a6278",
-    bg: "#f0f4f8",
   },
 ];
 
@@ -43,33 +39,30 @@ const methods = [
     title: "전화 주문",
     value: "1588-3900",
     sub: "연중무휴 07:00 ~ 22:00",
-    desc: "전화 한 통으로 빠르게 주문하세요.",
-    color: "var(--primary)",
-    bg: "#e8f5ed",
+    desc: "전화 한 통으로 빠르게 주문",
     action: "tel:1588-3900",
     actionLabel: "전화하기",
+    style: { background: "#e8f5ed", borderColor: "var(--primary)", valueColor: "var(--primary)" },
   },
   {
     icon: "💬",
     title: "카카오톡 주문",
-    value: "가나플라워",
+    value: "@가나플라워",
     sub: "카카오 채널 검색",
-    desc: "카카오톡으로 편리하게 주문하세요.",
-    color: "#3C1E1E",
-    bg: "#FEF9C3",
+    desc: "카카오톡으로 편리하게 주문",
     action: "#contact",
     actionLabel: "채널 연결",
+    style: { background: "#FEF9C3", borderColor: "#c49a3c", valueColor: "#3C1E1E" },
   },
   {
     icon: "🌐",
     title: "온라인 주문",
     value: "빠른 주문 폼",
     sub: "24시간 접수 가능",
-    desc: "하단 주문 폼을 통해 간편하게 신청하세요.",
-    color: "var(--pink)",
-    bg: "var(--pink-pale)",
+    desc: "하단 주문 폼으로 간편 신청",
     action: "#contact",
     actionLabel: "주문 폼으로",
+    style: { background: "#fce8ed", borderColor: "var(--pink)", valueColor: "var(--pink)" },
   },
 ];
 
@@ -90,104 +83,97 @@ export default function Location() {
     if (action.startsWith("tel:")) {
       window.location.href = action;
     } else {
-      const id = action.replace("#", "");
-      const el = document.getElementById(id);
-      if (el) el.scrollIntoView({ behavior: "smooth" });
+      document.getElementById(action.replace("#", ""))?.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   return (
-    <section id="howtoorder" ref={ref} className="py-16 md:py-28" style={{ background: "var(--beige)" }}>
-      <div className="max-w-6xl mx-auto px-5 md:px-6">
+    <section id="howtoorder" ref={ref} className="py-8 md:py-14" style={{ background: "#fff" }}>
+      <div className="max-w-6xl mx-auto px-4">
+
         {/* 헤더 */}
-        <div className="text-center mb-12 md:mb-16"
-          style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(30px)", transition: "all 0.7s" }}>
+        <div
+          className="mb-8"
+          style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(20px)", transition: "all 0.6s" }}
+        >
           <span className="section-label">HOW TO ORDER</span>
           <h2 className="section-title">주문 방법</h2>
-          <div className="divider-line mx-auto" />
-          <p className="section-desc max-w-lg mx-auto">
-            전화, 카카오톡, 온라인 주문 폼으로 간편하게 주문하세요.<br />
-            친절한 상담원이 도와드립니다.
+          <p className="text-sm mt-1" style={{ color: "#888" }}>
+            전화·카카오·온라인 주문 폼으로 간편하게 주문하세요.
           </p>
         </div>
 
-        {/* 주문 방법 카드 */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-16 md:mb-20">
-          {methods.map((method, i) => (
+        {/* 주문 방법 카드 3개 */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
+          {methods.map((m, i) => (
             <div
               key={i}
-              className="p-7 rounded-2xl border text-center transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+              className="p-5 rounded-xl border-2 text-center transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
               style={{
-                background: method.bg,
-                borderColor: "transparent",
+                background: m.style.background,
+                borderColor: m.style.borderColor,
                 opacity: visible ? 1 : 0,
-                transform: visible ? "translateY(0)" : "translateY(30px)",
-                transition: `all 0.6s ease ${i * 0.15}s`,
+                transform: visible ? "translateY(0)" : "translateY(20px)",
+                transition: `all 0.5s ease ${i * 0.1}s`,
               }}
             >
-              <div className="text-5xl mb-5">{method.icon}</div>
-              <div className="text-sm font-bold tracking-widest mb-2" style={{ color: method.color, opacity: 0.7 }}>
-                {method.sub}
-              </div>
-              <h3 className="text-xl font-black mb-2" style={{ color: "#1a1a1a" }}>{method.title}</h3>
-              <p className="text-xl font-black mb-3" style={{ color: method.color }}>{method.value}</p>
-              <p className="text-base mb-6" style={{ color: "var(--gray)" }}>{method.desc}</p>
+              <div className="text-4xl mb-3">{m.icon}</div>
+              <p className="text-xs font-semibold mb-1" style={{ color: "#888" }}>{m.sub}</p>
+              <h3 className="text-base font-black mb-1" style={{ color: "#1a1a1a" }}>{m.title}</h3>
+              <p className="text-lg font-black mb-2" style={{ color: m.style.valueColor }}>{m.value}</p>
+              <p className="text-sm mb-4" style={{ color: "#888" }}>{m.desc}</p>
               <button
-                onClick={() => handleAction(method.action)}
-                className="w-full py-3 text-base font-bold rounded-lg border-2 transition-all duration-200"
+                onClick={() => handleAction(m.action)}
+                className="w-full py-2.5 text-sm font-bold rounded-lg border-2 transition-all duration-150"
                 style={{
-                  borderColor: method.color,
-                  color: method.color,
+                  borderColor: m.style.valueColor,
+                  color: m.style.valueColor,
                   background: "transparent",
                   cursor: "pointer",
                 }}
                 onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLButtonElement).style.background = method.color;
-                  (e.currentTarget as HTMLButtonElement).style.color = "#fff";
+                  const el = e.currentTarget;
+                  el.style.background = m.style.valueColor;
+                  el.style.color = "#fff";
                 }}
                 onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLButtonElement).style.background = "transparent";
-                  (e.currentTarget as HTMLButtonElement).style.color = method.color;
+                  const el = e.currentTarget;
+                  el.style.background = "transparent";
+                  el.style.color = m.style.valueColor;
                 }}
               >
-                {method.actionLabel} →
+                {m.actionLabel} →
               </button>
             </div>
           ))}
         </div>
 
-        {/* 주문 프로세스 */}
-        <div className="mb-8 text-center">
-          <h3 className="text-2xl font-black" style={{ color: "var(--primary-dark)" }}>
-            주문부터 배달까지, 4단계
+        {/* 주문 프로세스 4단계 */}
+        <div
+          className="p-5 md:p-7 rounded-xl"
+          style={{ background: "#f8f8f8", opacity: visible ? 1 : 0, transition: "opacity 0.6s 0.3s" }}
+        >
+          <h3 className="text-base font-black mb-5 text-center" style={{ color: "#1a1a1a" }}>
+            주문부터 배달까지 4단계
           </h3>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {steps.map((step, i) => (
-            <div
-              key={i}
-              className="relative p-6 rounded-2xl"
-              style={{
-                background: step.bg,
-                opacity: visible ? 1 : 0,
-                transform: visible ? "translateY(0)" : "translateY(30px)",
-                transition: `all 0.6s ease ${0.3 + i * 0.1}s`,
-              }}
-            >
-              {/* 연결선 (마지막 제외) */}
-              {i < steps.length - 1 && (
-                <div className="hidden lg:block absolute top-1/2 -right-2 z-10 text-gray-300 text-xl">
-                  →
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {steps.map((step, i) => (
+              <div
+                key={i}
+                className="bg-white rounded-lg p-4 text-center relative"
+                style={{ border: "1px solid #eee" }}
+              >
+                <div className="text-3xl mb-2">{step.icon}</div>
+                <div className="text-xs font-black mb-1" style={{ color: step.color, opacity: 0.7 }}>
+                  STEP {step.step}
                 </div>
-              )}
-              <div className="text-4xl mb-4">{step.icon}</div>
-              <div className="text-xs font-black tracking-widest mb-1.5" style={{ color: step.color, opacity: 0.5 }}>
-                STEP {step.step}
+                <h4 className="text-sm font-black mb-1.5" style={{ color: "#1a1a1a" }}>{step.title}</h4>
+                <p className="text-xs leading-relaxed whitespace-pre-line" style={{ color: "#888" }}>
+                  {step.desc}
+                </p>
               </div>
-              <h4 className="font-black text-lg mb-3" style={{ color: "#1a1a1a" }}>{step.title}</h4>
-              <p className="text-sm leading-relaxed" style={{ color: "var(--gray-dark)" }}>{step.desc}</p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>
